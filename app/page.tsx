@@ -27,7 +27,7 @@ export default async function Page() {
           className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${font.className}`}
         >
           <span>Hello,</span>
-          <span>I&apos;m Paranoid_K</span>
+          <span>I&apos;m Zenquan</span>
         </h1>
         <div className="mt-6 text-gray-900 space-y-1.5">
           <p>🧑‍💻 前端开发者 / Front-end Developer</p>

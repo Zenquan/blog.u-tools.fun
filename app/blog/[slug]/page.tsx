@@ -8,7 +8,7 @@ export const generateMetadata = async props => {
   const params = await props.params;
   const blog = allBlogs.find((item) => item.slug === params.slug);
   return {
-    title: `${blog.title} - Paranoid_K's Blog`,
+    title: `${blog.title} - Zenquan's Blog`,
     description: blog.description,
     keywords: blog.tags.join(', '),
   };

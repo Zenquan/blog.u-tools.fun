@@ -12,9 +12,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Paranoid_K',
-  description: 'Paranoid_K 的个人站点，关于前端、JavaScript 等',
-  authors: [{ name: 'Paranoid_K', url: 'https://pengtikui.cn' }],
+  title: 'Zenquan',
+  description: 'Zenquan 的个人站点，关于前端、JavaScript 等',
+  authors: [{ name: 'Zenquan', url: 'https://blog.u-tools.fun' }],
   other: {
     'baidu-site-verification': 'codeva-vCZMO1BPzq',
   },

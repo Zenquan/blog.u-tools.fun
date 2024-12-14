@@ -8,7 +8,7 @@ export const generateMetadata = async (props) => {
   const params = await props.params;
   const weekly = allWeeklies.find((item) => item.slug === params.slug);
   return {
-    title: `${weekly.title} - Paranoid_K's Weekly`,
+    title: `${weekly.title} - Zenquan's Weekly`,
     description: weekly.description,
   };
 };

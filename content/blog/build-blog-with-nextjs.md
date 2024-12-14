@@ -143,7 +143,7 @@ Next.js 是由 [Vercel ](https://vercel.com/dashboard) 开发的，所以把项�
 
 ## 参考链接
 
-- [本博客源码仓库](https://github.com/pengtikui/pengtikui.cn)
+- [本博客源码仓库](https://github.com/pengtikui/blog.u-tools.fun)
 - [Install Tailwind CSS with Next.js](https://tailwindcss.com/docs/guides/nextjs)
 - [Customizing PostCSS Config](https://nextjs.org/docs/advanced-features/customizing-postcss-config)
 - [Data Fetching](https://nextjs.org/docs/basic-features/data-fetching)

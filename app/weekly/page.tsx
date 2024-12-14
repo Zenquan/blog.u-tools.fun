@@ -10,7 +10,7 @@ const font = Lato({
 });
 
 export const metadata: Metadata = {
-  title: `Paranoid_K's Weekly`,
+  title: `Zenquan's Weekly`,
 };
 
 export default async function Page() {

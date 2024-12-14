@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://pengtikui.cn/sitemap.xml',
+    sitemap: 'https://blog.u-tools.fun/sitemap.xml',
   };
 }
