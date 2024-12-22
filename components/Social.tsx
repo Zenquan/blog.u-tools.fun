@@ -8,7 +8,7 @@ const Social: FC = () => {
     <div className="mt-6 flex items-center space-x-3">
       <Link
         className="block p-1.5 rounded-full text-white bg-[#171515] transition-opacity hover:opacity-75"
-        href="https://github.com/pengtikui"
+        href="https://github.com/zenquan"
         target="_blank"
         title="Github"
       >
@@ -16,12 +16,12 @@ const Social: FC = () => {
       </Link>
       <a
         className="block p-1.5 rounded-full text-white bg-[#e86125] transition-colors hover:opacity-75"
-        href="mailto:pengtikui@gmail.com"
+        href="mailto:jomsoucan@gmail.com"
         title="邮箱"
       >
         <IconMail size={20} />
       </a>
-      <Link
+      {/* <Link
         className="block p-1.5 rounded-full text-white bg-[#0f1419] transition-colors hover:opacity-75"
         href="https://x.com/pengtikui"
         target="_blank"
@@ -29,7 +29,7 @@ const Social: FC = () => {
       >
         <IconBrandX size={20} />
       </Link>
-      <WechatDialog />
+      <WechatDialog /> */}
     </div>
   );
 };
