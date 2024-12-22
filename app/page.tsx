@@ -32,16 +32,6 @@ export default async function Page() {
         <div className="mt-6 text-gray-900 space-y-1.5">
           <p>🧑‍💻 前端开发者 / Front-end Developer</p>
           <p>🤩 正在做一些有趣的事 / Working on something interesting</p>
-          <p>
-            🥰{' '}
-            <a href="https://sotake.com" target="_blank" className="hover:underline">
-              sotake.com
-            </a>
-            <span className="mx-1">·</span>
-            <a href="https://kee.so" target="_blank" className="hover:underline">
-              kee.so
-            </a>
-          </p>
         </div>
         <Social />
       </div>
