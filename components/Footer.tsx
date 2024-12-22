@@ -7,7 +7,7 @@ const Footer: FC = () => {
         <p>Zenquan &copy; {new Date().getFullYear()}</p>
         <span className="font-bold">·</span>
         <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer">
-          鲁ICP备15010597号-1
+          粤ICP备2024252469号
         </a>
       </div>
     </footer>
