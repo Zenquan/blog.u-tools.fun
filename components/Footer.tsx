@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 const Footer: FC = () => {
   return (
-    <footer className="py-6 border-t border-gray-100">
+    <footer className="px-3 py-4 border-t border-gray-100">
       <div className="max-w-3xl mx-auto px-2 flex items-center space-x-2 text-xs text-gray-500">
         <p>Zenquan &copy; {new Date().getFullYear()}</p>
         <span className="font-bold">·</span>

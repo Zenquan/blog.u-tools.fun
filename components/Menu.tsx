@@ -24,7 +24,7 @@ const LIST = [
 
 const Menu: FC = () => {
   return (
-    <nav className="bg-white/30 backdrop-blur-sm shadow-sm py-4 sticky top-0 z-10">
+    <nav className="bg-white/30 backdrop-blur-sm shadow-sm px-3 py-4 sticky top-0 z-10">
       <div className="max-w-3xl mx-auto px-2 flex items-center justify-between">
         <Link href="/" className="flex shadow-sm rounded-full overflow-hidden border">
           <Image src="/icons/favicon.png" alt="Zenquan" width={34} height={34} />
