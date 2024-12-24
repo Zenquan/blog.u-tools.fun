@@ -26,14 +26,19 @@ export default async function Page(props) {
   return (
     <div className="relative">
       <div className="flex flex-col items-center px-2 pt-12 pb-8">
-        <h1 className="font-medium text-2xl">{blog.title}</h1>
+        <h1 className="font-medium text-2xl text-center">{blog.title}</h1>
         <p className="mt-2 text-gray-500 text-sm font-mono">{blog.date}</p>
       </div>
-      <div className="flex justify-between gap-8">
+      <div className="flex flex-col lg:flex-row justify-between gap-8">
         <article className="w-full px-2 prose max-w-none lg:max-w-[720px]">
           <MDX code={blog.body.code} />
         </article>
-        <TOC className="w-[260px] flex-shrink-0" />
+        <div className="hidden lg:block w-[260px] flex-shrink-0">
+          <TOC />
+        </div>
+      </div>
+      <div className="lg:hidden">
+        <TOC isMobile />
       </div>
     </div>
   );
