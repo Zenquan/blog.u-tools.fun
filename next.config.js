@@ -27,6 +27,11 @@ const nextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
+    domains: [
+      'p3-luna.douyinpic.com',
+      'p6-luna.douyinpic.com',
+      'p9-luna.douyinpic.com',
+    ],
   },
 };
 
