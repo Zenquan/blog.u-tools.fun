@@ -6,6 +6,7 @@ import List from '@/components/List';
 import Search from '@/components/Search';
 import Tag from '@/components/Tag';
 import { titleFont } from '@/lib/utils/fonts';
+import { Suspense } from 'react';
 
 interface Post {
   title: string;
@@ -85,7 +86,7 @@ export default function Page() {
   });
 
   return (
-    <>
+    <Suspense>
       <div className="pt-10 pb-6 px-3">
         <h1
           className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${titleFont.className}`}
@@ -128,6 +129,6 @@ export default function Page() {
           title: `${post.title} · ${post.type}`,
         }))}
       />
-    </>
+    </Suspense>
   );
 }
