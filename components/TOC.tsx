@@ -151,7 +151,7 @@ const TOC: FC<TOCProps> = ({ isMobile = false }) => {
 
   // 桌面端布局
   return (
-    <div className="sticky top-8">
+    <div className="sticky top-20">
       <h2 className="text-sm font-medium text-gray-900 mb-4">目录</h2>
       {renderTOCContent()}
     </div>
