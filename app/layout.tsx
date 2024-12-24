@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: 'Zenquan 的个人站点，关于前端、JavaScript 等',
   authors: [{ name: 'Zenquan', url: 'https://blog.u-tools.fun' }],
   other: {
-    'baidu-site-verification': 'codeva-vCZMO1BPzq',
+    'baidu-site-verification': '',
   },
 };
 
