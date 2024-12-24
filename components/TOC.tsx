@@ -10,11 +10,10 @@ interface TOCItem {
 }
 
 interface TOCProps {
-  className?: string;
   isMobile?: boolean;
 }
 
-const TOC: FC<TOCProps> = ({ className = '', isMobile = false }) => {
+const TOC: FC<TOCProps> = ({ isMobile = false }) => {
   const [headings, setHeadings] = useState<TOCItem[]>([]);
   const [activeId, setActiveId] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
@@ -152,12 +151,10 @@ const TOC: FC<TOCProps> = ({ className = '', isMobile = false }) => {
 
   // 桌面端布局
   return (
-    <nav className={className}>
-      <div className="sticky top-8">
-        <h2 className="text-sm font-medium text-gray-900 mb-4">目录</h2>
-        {renderTOCContent()}
-      </div>
-    </nav>
+    <div className="sticky top-8">
+      <h2 className="text-sm font-medium text-gray-900 mb-4">目录</h2>
+      {renderTOCContent()}
+    </div>
   );
 };
 
