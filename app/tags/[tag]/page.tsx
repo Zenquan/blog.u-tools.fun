@@ -5,13 +5,7 @@ import { notFound } from 'next/navigation';
 import { formatDate } from '@/lib/utils/formatDate';
 import { titleFont } from '@/lib/utils/fonts';
 
-type Props = {
-  params: {
-    tag: string;
-  };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }): Promise<Metadata> {
   const tag = decodeURIComponent(params.tag);
   return {
     title: `${tag} - 标签 - Zenquan's Blog`,
@@ -31,7 +25,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page({ params }) {
   const tag = decodeURIComponent(params.tag);
   const blogs = allBlogs
     .filter((blog) => blog.tags?.includes(tag))
