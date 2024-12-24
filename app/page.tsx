@@ -13,11 +13,11 @@ const font = Anton({
 
 export default async function Page() {
   const weeklyList = allWeeklies
-    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+    .sort((a, b) => (a.date > b.date ? -1 : 1))
     .slice(0, 5);
 
   const blogList = allBlogs
-    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+    .sort((a, b) => (a.date > b.date ? -1 : 1))
     .slice(0, 5);
 
   return (

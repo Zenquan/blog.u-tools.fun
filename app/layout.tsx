@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         {children}
         <Footer />
       </body>
-      <Script src="https://cdn.splitbee.io/sb.js" />
+      <Script src="https://cdn.splitbee.io/sb.js" strategy="afterInteractive" />
     </html>
   );
 }

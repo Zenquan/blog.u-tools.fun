@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const blogList = allBlogs.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
+  const blogList = allBlogs.sort((a, b) => (a.date > b.date ? -1 : 1));
 
   return (
     <>

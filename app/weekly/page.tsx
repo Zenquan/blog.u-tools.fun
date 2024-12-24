@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const weeklyList = allWeeklies.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
+  const weeklyList = allWeeklies.sort((a, b) => (a.date > b.date ? -1 : 1));
 
   return (
     <>
