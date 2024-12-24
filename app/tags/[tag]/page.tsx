@@ -1,22 +1,17 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Lato } from 'next/font/google';
 import { allBlogs } from 'contentlayer/generated';
 import { notFound } from 'next/navigation';
 import { formatDate } from '@/lib/utils/formatDate';
+import { titleFont } from '@/lib/utils/fonts';
 
-const font = Lato({
-  weight: '700',
-  subsets: ['latin'],
-});
-
-interface Props {
+interface PageProps {
   params: {
     tag: string;
   };
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const tag = decodeURIComponent(params.tag);
   return {
     title: `${tag} - 标签 - Zenquan's Blog`,
@@ -36,7 +31,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const tag = decodeURIComponent(params.tag);
   const blogs = allBlogs
     .filter((blog) => blog.tags?.includes(tag))
@@ -50,7 +45,7 @@ export default async function Page({ params }: Props) {
     <>
       <div className="pt-10 pb-6 px-3">
         <h1
-          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${font.className}`}
+          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${titleFont.className}`}
         >
           标签：{tag}
         </h1>

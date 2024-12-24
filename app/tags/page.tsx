@@ -1,12 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Lato } from 'next/font/google';
 import { allBlogs } from 'contentlayer/generated';
-
-const font = Lato({
-  weight: '700',
-  subsets: ['latin'],
-});
+import { titleFont } from '@/lib/utils/fonts';
 
 export const metadata: Metadata = {
   title: '标签 - Zenquan\'s Blog',
@@ -31,7 +26,7 @@ export default async function Page() {
     <>
       <div className="pt-10 pb-6 px-3">
         <h1
-          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${font.className}`}
+          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${titleFont.className}`}
         >
           标签
         </h1>

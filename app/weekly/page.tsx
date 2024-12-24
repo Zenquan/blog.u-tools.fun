@@ -1,35 +1,27 @@
 import { Metadata } from 'next';
-import { Lato } from 'next/font/google';
-import { compareDesc } from 'date-fns';
-import List from '@/components/List';
 import { allWeeklies } from 'contentlayer/generated';
-
-const font = Lato({
-  weight: '700',
-  subsets: ['latin'],
-});
+import List from '@/components/List';
+import { titleFont } from '@/lib/utils/fonts';
 
 export const metadata: Metadata = {
-  title: `Zenquan's Weekly`,
+  title: '周刊 - Zenquan\'s Blog',
+  description: '每周分享科技、编程、设计等内容',
 };
 
-export default async function Page() {
-  const weeklyList = allWeeklies.sort((a, b) => (a.date > b.date ? -1 : 1));
-
+export default function Page() {
   return (
     <>
       <div className="pt-10 pb-6 px-3">
         <h1
-          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${font.className}`}
+          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${titleFont.className}`}
         >
-          周刊 / Weekly
+          周刊
         </h1>
-        <p className="mt-4 text-gray-600 text-sm leading-relaxed">
-          我会在这分享近期看到的、学到的新奇好玩的东西或技术，内容包括但不仅限于前端技术、设计和 TMT
-          行业资讯等。
+        <p className="mt-4 text-gray-600 text-sm">
+          共 {allWeeklies.length} 期周刊
         </p>
       </div>
-      <List data={weeklyList} />
+      <List data={allWeeklies} />
     </>
   );
 }

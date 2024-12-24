@@ -1,16 +1,11 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Lato } from 'next/font/google';
 import { allBlogs, allWeeklies } from 'contentlayer/generated';
 import List from '@/components/List';
 import Search from '@/components/Search';
 import Tag from '@/components/Tag';
-
-const font = Lato({
-  weight: '700',
-  subsets: ['latin'],
-});
+import { titleFont } from '@/lib/utils/fonts';
 
 interface Post {
   title: string;
@@ -93,7 +88,7 @@ export default function Page() {
     <>
       <div className="pt-10 pb-6 px-3">
         <h1
-          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${font.className}`}
+          className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${titleFont.className}`}
         >
           搜索
         </h1>
