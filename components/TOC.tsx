@@ -85,7 +85,7 @@ const TOC: FC<TOCProps> = ({ isMobile = false }) => {
   };
 
   const renderTOCContent = () => (
-    <ul className="space-y-2 text-sm">
+    <ul className="overflow-y-scroll flex-1 space-y-2 text-sm">
       {headings.map((heading) => (
         <li
           key={heading.id}
@@ -129,12 +129,12 @@ const TOC: FC<TOCProps> = ({ isMobile = false }) => {
           <div className="fixed inset-0 z-50 toc-overlay">
             <div className="absolute inset-0 bg-black/20" onClick={() => setIsOpen(false)} />
             <div className="absolute right-0 top-0 bottom-0 w-[80%] max-w-[300px] bg-white shadow-lg toc-drawer">
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-sm font-medium text-gray-900">目录</h2>
+              <div className="py-4 flex flex-col h-full">
+                <div className="flex items-center justify-between mb-4 h-[28px]">
+                  <h2 className="px-4 text-sm font-medium text-gray-900">目录</h2>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-1 pr-4 hover:bg-gray-100 rounded-lg transition-colors"
                     aria-label="关闭目录"
                   >
                     <X size={20} className="text-gray-500" />
