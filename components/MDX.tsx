@@ -106,10 +106,10 @@ const MusicPlayer: FC<MusicPlayerProps> = ({
           </div>
 
           {/* 信息 */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 pr-[15px]">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 truncate">
+                <h3 className="text-xl font-semibold text-gray-900 truncate m-0">
                   {title}
                 </h3>
                 <p className="mt-1.5 text-sm text-gray-500 flex items-center gap-2">
@@ -123,7 +123,7 @@ const MusicPlayer: FC<MusicPlayerProps> = ({
               <div>
                 <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 rounded-full transition-all duration-100"
+                    className="h-full bg-black rounded-full transition-all duration-100"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
