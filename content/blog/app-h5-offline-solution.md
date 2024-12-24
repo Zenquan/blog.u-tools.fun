@@ -1,5 +1,5 @@
 ---
-title: App H5离线方案探索
+title: Hybrid App 中 H5离线方案探索
 date: 2024-11-23
 description: 这是我对于App H5的离线方案的探索思考。也实践了一番。
 tags:
