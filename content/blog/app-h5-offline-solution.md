@@ -8,9 +8,9 @@ tags:
   - webview
 ---
 
-# 方案一：离线包 + LocalServer
+## 方案一：离线包 + LocalServer
 
-## 设计思路
+### 设计思路
 
 这是一个基于Android WebView的离线Web应用加载方案。主要功能包括:
 
@@ -19,9 +19,9 @@ tags:
 - WebView页面加载和展示
 - 版本更新检测
 
-## 技术架构
+### 技术架构
 
-### 核心组件
+#### 核心组件
 
 1. **MainActivity**: 主界面管理
 
@@ -35,22 +35,22 @@ tags:
 - 提供静态资源访问服务
 - 支持多种MIME类型
 
-### 工作流程
+#### 工作流程
 
 1. 应用启动时检查最新版本
 2. 下载并解压新版本资源包
 3. 启动本地HTTP服务器
 4. WebView加载本地服务器提供的页面
 
-## 关键实现
+### 关键实现
 
-### 客户端
+#### 客户端
 
-#### 版本管理
+##### 版本管理
 
-##### 版本比较
+###### 版本比较
 
-```
+```kotlin
 data class VersionInfo(val version: String, val pkgZipUrl: String)
 // 检查新版本
 private fun isNewerVersion(latest: String, current: String): Boolean {
@@ -70,9 +70,9 @@ private fun isNewerVersion(latest: String, current: String): Boolean {
 }
 ```
 
-##### 检查并下载最新版本
+###### 检查并下载最新版本
 
-```
+```kotlin
 // 从离线目录获取当前版本号
 private fun getCurrentVersion(offlineDir: File): String {
     // 从离线目录获取当前版本号
@@ -117,9 +117,9 @@ GlobalScope.launch(Dispatchers.IO) {
 }
 ```
 
-##### 下载并解压压缩包
+###### 下载并解压压缩包
 
-```
+```kotlin
 private suspend fun downloadFile(url: String, outputFile: File) {
     withContext(Dispatchers.IO) {
         val connection = URL(url).openConnection() as HttpURLConnection
@@ -167,9 +167,9 @@ private fun unzipFile(zipFile: File, targetDir: File) {
 }
 ```
 
-##### 删除旧版本
+###### 删除旧版本
 
-```
+```kotlin
 private fun cleanOldVersions(offlineDir: File, newVersion: String) {
     offlineDir.listFiles()?.forEach { file ->
         if (file.isDirectory && file.name != newVersion) {
@@ -180,9 +180,9 @@ private fun cleanOldVersions(offlineDir: File, newVersion: String) {
 }
 ```
 
-##### 销毁
+###### 销毁
 
-```
+```kotlin
 override fun onDestroy() {
     // 停止本地服务器
     stopService(Intent(this, LocalWebServer::class.java))
@@ -190,9 +190,9 @@ override fun onDestroy() {
 }
 ```
 
-#### 本地服务器
+##### 本地服务器
 
-```
+```kotlin
 package com.example.myapplication
 
 import android.app.Service
@@ -315,7 +315,7 @@ class LocalWebServer : Service() {
 
 WebView配置
 
-```
+```kotlin
 webView.settings.apply {
     javaScriptEnabled = true
     domStorageEnabled = true
@@ -328,20 +328,20 @@ webView.settings.apply {
 }
 ```
 
-### 前端
+#### 前端
 
-#### 版本发布后台
+##### 版本发布后台
 
 用来管理H5版本，代码包
 
-## 注意事项
+### 注意事项
 
 - 确保网络权限配置正确
 - 资源包的下载和解压需要在后台线程进行
 - WebView的安全配置要根据实际需求调整
 - 本地服务器的端口号要避免冲突
 
-## 优化建议
+### 优化建议
 
 1. 添加资源包完整性校验
 2. 实现增量更新机制
@@ -349,28 +349,28 @@ webView.settings.apply {
 4. 优化版本检查策略
 5. 添加错误重试机制
 
-# 方案二：WebView 预加载 + 缓存资源
+## 方案二：WebView 预加载 + 缓存资源
 
-## 设计思路
+### 设计思路
 
 - 采用单例模式的 WebViewManager 统一管理 WebView 实例
 - 预加载机制避免每次重新创建 WebView 带来的性能开销
 - 复用同一个 WebView 实例,减少内存占用
 
-## 关键实现
+### 关键实现
 
-### 客户端
+#### 客户端
 
-#### WebView 预加载
+##### WebView 预加载
 
-```
+```kotlin
   // 预加载基础URL
   WebViewManager.preloadUrl(context, baseUrl) {
       Log.d(TAG, "WebView预加载完成")
   }  
 ```
 
-```
+```kotlin
     fun preloadUrl(context: Context, url: String, onLoadComplete: () -> Unit) {
         // 如果已经有预加载的 WebView，直接使用
         if (preloadedWebView != null) {
@@ -511,9 +511,9 @@ webView.settings.apply {
     }
 ```
 
-#### 设置缓存
+##### 设置缓存
 
-```
+```kotlin
   webView.settings.apply {
       // 启用缓存
       cacheMode = WebSettings.LOAD_DEFAULT
@@ -524,11 +524,11 @@ webView.settings.apply {
   }  
 ```
 
-#### 页面切换
+##### 页面切换
 
 - URL 替换而非重新加载webview
 
-```
+```kotlin
   fun replaceUrl(webView: WebView, newUrl: String) {
       // 停止当前加载
       webView.stopLoading()
@@ -559,11 +559,11 @@ webView.settings.apply {
   }  
 ```
 
-#### 接口请求（可做可不做）
+##### 接口请求（可做可不做）
 
 - JSBridge 实现双向通信
 
-```
+```kotlin
   // Web 端注册
   window.AndroidBridge = {
       registerRefreshMethod: function(methodName) {
@@ -577,7 +577,7 @@ webView.settings.apply {
 
 - 原生端实现
 
-```
+```kotlin
 class JSBridge(private val webView: WebView) {
   @JavascriptInterface
   fun registerRefreshMethod(methodName: String) {
@@ -592,14 +592,14 @@ class JSBridge(private val webView: WebView) {
 }
 ```
 
-### 错误处理
+#### 错误处理
 
 - 完整的错误监控
 - SSL 错误处理
 - 资源加载监控
 - 控制台日志捕获
 
-## 注意事项
+### 注意事项
 
 1. WebView 实例复用需要注意内存管理
 2. 预加载需要合理选择基础URL
@@ -607,7 +607,7 @@ class JSBridge(private val webView: WebView) {
 4. SSL 证书问题需要合理处理
 5. 缓存策略需要根据业务需求调整
 
-## 优化建议
+### 优化建议
 
 1. 合理使用预加载机制
 2. 优化缓存策略
@@ -615,7 +615,7 @@ class JSBridge(private val webView: WebView) {
 4. 监控页面加载性能
 5. 优化通信机制
 
-# 两个方案对比
+## 两个方案对比
 
 |   |   |   |
 |---|---|---|
@@ -627,13 +627,13 @@ class JSBridge(private val webView: WebView) {
 |资源更新时机|需要通过控制版本发布系统的更新来获取是否更新|前端发版时|
 |性能评估|||
 
-# 进一步研究
+## 进一步研究
 
 经过以上的demo调研后，发现还存在一个问题，也就是每次切换页面的时候，使用的是webview.loadUrl的方式，还是会引发h5页面的重新刷新，还是比原生页面逊色不少。
 
 所以接下来的优化点有应该是页面切换的优化。
 
-## 想法一：共享一个webview，通过切换历史访问记录
+### 想法一：共享一个webview，通过切换历史访问记录
 
 只是共享一个webview的话，就只有一个路由栈，出现以下两个问题：
 
@@ -641,7 +641,7 @@ class JSBridge(private val webView: WebView) {
 
 2、后期的路由栈会非常混乱，很难准确地定位到历史访问记录。
 
-## 想法二：开始使用预加载的webview，后面访问新的页面，新建一个webview，最大的webview个数为4
+### 想法二：开始使用预加载的webview，后面访问新的页面，新建一个webview，最大的webview个数为4
 
 开始使用预加载的webview，后面访问新的页面，新建一个webview，最大的webview个数为4，超过则复用之前访问次数比较少（不活跃）的webview。
 
