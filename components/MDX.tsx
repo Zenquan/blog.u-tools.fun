@@ -8,9 +8,28 @@ export interface MDXProps {
   code: string;
 }
 
+const slugifyWithCounter = () => {
+  const slugs = new Map<string, number>();
+
+  return (str: string) => {
+    const base = str
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-');
+
+    const count = slugs.get(base) ?? 0;
+    slugs.set(base, count + 1);
+
+    return count === 0 ? base : `${base}-${count}`;
+  };
+};
+
 const MDX: FC<MDXProps> = ({ code }) => {
   try {
     const Component = useMDXComponent(code);
+    const slugify = slugifyWithCounter();
 
     return (
       <div className="mdx-content">
@@ -20,6 +39,15 @@ const MDX: FC<MDXProps> = ({ code }) => {
               <div className="my-4">
                 <Image {...props} />
               </div>
+            ),
+            h1: (props: any) => (
+              <h1 {...props} id={slugify(props.children)} />
+            ),
+            h2: (props: any) => (
+              <h2 {...props} id={slugify(props.children)} />
+            ),
+            h3: (props: any) => (
+              <h3 {...props} id={slugify(props.children)} />
             ),
           }}
         />
