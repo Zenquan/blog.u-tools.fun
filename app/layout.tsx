@@ -23,10 +23,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN" className={inter.variable}>
-      <body className="max-w-3xl mx-auto px-2">
+      <body>
         <Menu />
-        {children}
-        <Footer />
+        <div className="max-w-3xl mx-auto px-2">{children}</div>
+        <Footer/>
       </body>
       <Script src="https://cdn.splitbee.io/sb.js" strategy="afterInteractive" />
     </html>

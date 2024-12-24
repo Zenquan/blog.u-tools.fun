@@ -23,10 +23,11 @@ const LIST = [
 
 const Menu: FC = () => {
   return (
-    <nav className="flex items-center justify-between pt-6 px-2">
-      <Link href="/" className="flex shadow-sm rounded-full overflow-hidden border">
-        <Image src="/icons/favicon.png" alt="Zenquan" width={34} height={34} />
-      </Link>
+    <nav className="bg-white/30 backdrop-blur-sm shadow-sm py-4 sticky top-0 z-10">
+      <div className="max-w-3xl mx-auto px-2 flex items-center justify-between">
+        <Link href="/" className="flex shadow-sm rounded-full overflow-hidden border">
+          <Image src="/icons/favicon.png" alt="Zenquan" width={34} height={34} />
+        </Link>
       <ul className="flex px-3 bg-white rounded-full shadow-lg shadow-gray-100 ring-1 ring-gray-100">
         {LIST.map((item) => (
           <li
@@ -35,8 +36,9 @@ const Menu: FC = () => {
           >
             <Link href={item.href}>{item.title}</Link>
           </li>
-        ))}
-      </ul>
+          ))}
+        </ul>
+      </div>
     </nav>
   );
 };
