@@ -30,7 +30,7 @@ export default async function Page(props) {
         <p className="mt-2 text-gray-500 text-sm font-mono">{blog.date}</p>
       </div>
       <div className="flex justify-between gap-8">
-        <article className="px-2 prose max-w-none lg:max-w-[720px]">
+        <article className="w-full px-2 prose max-w-none lg:max-w-[720px]">
           <MDX code={blog.body.code} />
         </article>
         <TOC className="w-[260px] flex-shrink-0" />
