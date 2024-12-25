@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-icons": "esno scripts/generate-icons.ts"
+    "generate-icons": "esno scripts/generate-icons.ts",
+    "music": "esno scripts/generate-musicinfo.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
