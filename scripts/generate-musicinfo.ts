@@ -118,7 +118,7 @@ async function extractMusicInfo(input: string): Promise<MusicInfo> {
     artist,
     cover: coverUrl,
     src,
-    platform: url.includes('qq.com') ? 'QQ音乐' : '抖音'
+    platform
   };
 }
 

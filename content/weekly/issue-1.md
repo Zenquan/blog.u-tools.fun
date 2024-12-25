@@ -12,7 +12,7 @@ description: 这是我的周刊的第一期，我会在这分享近期看到的�
   title="怎么你"
   artist="陈默之"
   cover="https://p3-luna.douyinpic.com/img/tos-cn-v-2774c002/osMAgKid7CiQQFLz5D2QSftAAUaxALeCfXCGIo~c5_375x375.jpg"
-  platform="@汽水音乐 "
+  platform="汽水音乐 "
   src="https://v11-luna.douyinvod.com/519dd0f056e30bab550fa2f78cda0554/676ce28b/video/tos/cn/tos-cn-ve-2774/oAXexkgzdapQACGADNALYUfbgeCCMtICQAXGiF/?a=8478&ch=0&cr=5&dr=0&cd=0%7C0%7C0%7C5&br=126&bt=126&ft=QTwr3yh8ffPdHK~2N12NvAq-antLjrKNP8oNRkaVXl8jljVhWL6&mime_type=audio_mp4&qs=6&rc=NDlmZzloNmlkOzhoZmg7OEBpajk1NGs5cnc7cjMzODlkNEA2Y2A0YC1hNTIxMzAxMjYuYSMxLS1kMmRrMmhgLS1kYS1zcw%3D%3D&btag=80000e00028000&dy_q=1735098913&l=20241225115513FFCC06F352E9B101E03A"
 />
 
