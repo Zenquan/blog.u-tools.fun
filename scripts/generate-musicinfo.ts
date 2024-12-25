@@ -19,7 +19,7 @@ async function getRedirectUrl(shortUrl: string): Promise<string> {
 async function extractMusicInfo(input: string): Promise<MusicInfo> {
   // 从输入中解析信息
   const titleMatch = input.match(/《(.+?)》/);
-  const platformtMatch = input.match(/@(.+?)(?:\s|$)/);
+  const platformMatch = input.match(/@(.+?)(?:\s|$)/);
   const urlMatch = input.match(/(https?:\/\/[^\s]+)/);
 
   if (!titleMatch || !urlMatch) {
@@ -29,9 +29,7 @@ async function extractMusicInfo(input: string): Promise<MusicInfo> {
   const title = titleMatch[1];
   let artist = '';
   const url = urlMatch[1];
-
-  // 根据 URL 确定平台
-  const platform = platformtMatch[0];
+  const platform = platformMatch ? platformMatch[1] : '';
 
   // 处理短链接
   const fullUrl = url.includes('v.douyin.com') ? await getRedirectUrl(url) : url;
@@ -44,56 +42,74 @@ async function extractMusicInfo(input: string): Promise<MusicInfo> {
       'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
       'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
-      'Referer': 'https://www.douyin.com/',
     },
   });
   
   const html = await response.text();
   
-  // 提取音频源和封面图
   let src = '';
   let coverUrl = '';
 
-  // 从 HTML 中提取作者信息
-  const artistHtmlMatch = html.match(/<span class="artist-name-max">([^<]+)<\/span>/);
-  if (artistHtmlMatch) {
-    artist = artistHtmlMatch[1];
-  }
+  // 根据URL判断平台并使用相应的解析逻辑
+  if (url.includes('qq.com')) {
+    // QQ音乐解析逻辑
+    const artistHtmlMatch = html.match(/<h2 class="singer_name">([^<]+)<\/h2>/);
+    if (artistHtmlMatch) {
+      artist = artistHtmlMatch[1];
+    }
 
-  // 从 _ROUTER_DATA 中提取信息
-  const routerDataMatch = html.match(/<script>window\._ROUTER_DATA\s*=\s*({[\s\S]+?})<\/script>/);
-  if (routerDataMatch) {
-    try {
-      const routerData = JSON.parse(routerDataMatch[1]);
-      const audioInfo = routerData?.loaderData?.track_page?.audioWithLyricsOption;
-      
-      if (audioInfo) {
-        src = audioInfo.url;
-        // 从页面中提取封面图
-        const coverMatch = html.match(/src="(https:\/\/p3-luna\.douyinpic\.com\/[^"]+)"/);
-        if (coverMatch) {
-          coverUrl = coverMatch[1];
+    const ssrDataMatch = html.match(/window\.__ssrFirstPageData__\s*=\s*({[\s\S]+?})<\/script>/);
+    if (ssrDataMatch) {
+      try {
+        const ssrData = JSON.parse(ssrDataMatch[1]);
+        if (ssrData.songList?.[0]) {
+          const song = ssrData.songList[0];
+          src = song.url;
+          coverUrl = ssrData.metaData?.image || '';
         }
+      } catch (error) {
+        console.error('Error parsing __ssrFirstPageData__:', error);
       }
-    } catch (error) {
-      console.error('Error parsing _ROUTER_DATA:', error);
     }
-  }
-
-  // 如果没有找到音频源，尝试其他方法
-  if (!src) {
-    // 尝试匹配完整的音频链接
-    const audioUrlMatch = html.match(/https:\/\/v[0-9]+-luna\.douyinvod\.com\/[^"'\s]+(?:mime_type=audio_mp4)[^"'\s]*/);
-    if (audioUrlMatch) {
-      src = audioUrlMatch[0].replace(/&amp;/g, '&');
+  } else {
+    // 抖音解析逻辑
+    const artistHtmlMatch = html.match(/<span class="artist-name-max">([^<]+)<\/span>/);
+    if (artistHtmlMatch) {
+      artist = artistHtmlMatch[1];
     }
-  }
 
-  // 如果没有找到封面图，尝试其他方法
-  if (!coverUrl) {
-    const coverMatch = html.match(/src="(https:\/\/p[0-9]-luna\.douyinpic\.com\/[^"]+)"/);
-    if (coverMatch) {
-      coverUrl = coverMatch[1];
+    const routerDataMatch = html.match(/<script>window\._ROUTER_DATA\s*=\s*({[\s\S]+?})<\/script>/);
+    if (routerDataMatch) {
+      try {
+        const routerData = JSON.parse(routerDataMatch[1]);
+        const audioInfo = routerData?.loaderData?.track_page?.audioWithLyricsOption;
+        
+        if (audioInfo) {
+          src = audioInfo.url;
+          const coverMatch = html.match(/src="(https:\/\/p3-luna\.douyinpic\.com\/[^"]+)"/);
+          if (coverMatch) {
+            coverUrl = coverMatch[1];
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing _ROUTER_DATA:', error);
+      }
+    }
+
+    // 如果没有找到音频源，尝试其他方法
+    if (!src) {
+      const audioUrlMatch = html.match(/https:\/\/v[0-9]+-luna\.douyinvod\.com\/[^"'\s]+(?:mime_type=audio_mp4)[^"'\s]*/);
+      if (audioUrlMatch) {
+        src = audioUrlMatch[0].replace(/&amp;/g, '&');
+      }
+    }
+
+    // 如果没有找到封面图，尝试其他方法
+    if (!coverUrl) {
+      const coverMatch = html.match(/src="(https:\/\/p[0-9]-luna\.douyinpic\.com\/[^"]+)"/);
+      if (coverMatch) {
+        coverUrl = coverMatch[1];
+      }
     }
   }
 
@@ -102,7 +118,7 @@ async function extractMusicInfo(input: string): Promise<MusicInfo> {
     artist,
     cover: coverUrl,
     src,
-    platform
+    platform: url.includes('qq.com') ? 'QQ音乐' : '抖音'
   };
 }
 

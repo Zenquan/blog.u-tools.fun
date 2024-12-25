@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const response = await fetch(url, {
       headers: {
-        'Referer': 'https://www.douyin.com/',
+        // 'Referer': 'https://www.douyin.com/',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       },
     });
