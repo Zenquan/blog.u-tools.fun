@@ -13,7 +13,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const result = await unsplash.collections.get({ collectionId: id });
     const collection = result.response;
-    console.log("🚀 ~ generateMetadata ~ collection:", JSON.stringify(collection))
     return {
       title: `${collection?.title || '摄影集'} - Zenquan's Blog`,
       description: collection?.description || '摄影集详情',
@@ -32,7 +31,6 @@ export default async function Page({ params }: Props) {
 
   try {
     const result = await unsplash.collections.get({ collectionId: id });
-    console.log("🚀 ~ Page ~ result:", result)
     if (result.response) {
       collection = result.response;
     }
