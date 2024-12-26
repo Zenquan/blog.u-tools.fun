@@ -29,7 +29,11 @@ export default async function Page(props) {
   const params = await props.params 
   const tag = decodeURIComponent(params.tag);
   const blogs = allBlogs
-    .filter((blog) => blog.tags?.includes(tag))
+    .filter((blog) => {
+      console.log('blog.tags', blog.tags);
+      console.log('tag', tag);
+      return blog.tags?.includes(tag);
+    })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   if (blogs.length === 0) {
