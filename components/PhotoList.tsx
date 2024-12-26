@@ -81,6 +81,7 @@ export default function PhotoList() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [previewPhoto, setPreviewPhoto] = useState<Photo | null>(null);
+  const [previewIndex, setPreviewIndex] = useState<number>(-1);
 
   const fetchPhotos = async () => {
     if (loading || !hasMore) return;
@@ -133,17 +134,32 @@ export default function PhotoList() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [photos, loading, hasMore]);
 
-  // 添加键盘事件监听，支持 ESC 关闭预览
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && previewPhoto) {
-        setPreviewPhoto(null);
-      }
-    };
+  const handlePreview = (photo: Photo) => {
+    const index = photos.findIndex(p => p.id === photo.id);
+    setPreviewIndex(index);
+    setPreviewPhoto(photo);
+  };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [previewPhoto]);
+  const handlePrevPhoto = () => {
+    if (previewIndex > 0) {
+      const prevPhoto = photos[previewIndex - 1];
+      setPreviewIndex(previewIndex - 1);
+      setPreviewPhoto(prevPhoto);
+    }
+  };
+
+  const handleNextPhoto = () => {
+    if (previewIndex < photos.length - 1) {
+      const nextPhoto = photos[previewIndex + 1];
+      setPreviewIndex(previewIndex + 1);
+      setPreviewPhoto(nextPhoto);
+    }
+  };
+
+  const handleClosePreview = () => {
+    setPreviewPhoto(null);
+    setPreviewIndex(-1);
+  };
 
   if (photos.length === 0 && !loading) {
     return (
@@ -160,7 +176,7 @@ export default function PhotoList() {
           <PhotoCard
             key={`${photo.id}-${photo.created_at}`}
             photo={photo}
-            onClick={() => setPreviewPhoto(photo)}
+            onClick={() => handlePreview(photo)}
           />
         ))}
       </div>
@@ -178,7 +194,11 @@ export default function PhotoList() {
         <ImagePreview
           src={previewPhoto.urls.full}
           alt={previewPhoto.alt_description || '照片'}
-          onClose={() => setPreviewPhoto(null)}
+          onClose={handleClosePreview}
+          onPrev={handlePrevPhoto}
+          onNext={handleNextPhoto}
+          hasPrev={previewIndex > 0}
+          hasNext={previewIndex < photos.length - 1}
         />
       )}
     </div>
