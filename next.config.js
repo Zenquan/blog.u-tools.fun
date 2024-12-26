@@ -33,11 +33,7 @@ const nextConfig = {
       'p9-luna.douyinpic.com',
       'y.gtimg.cn',
     ],
-  },
-  i18n: {
-    locales: ['zh-CN'],
-    defaultLocale: 'zh-CN',
-  },
+  }
 };
 
 module.exports = withContentlayer(nextConfig);
