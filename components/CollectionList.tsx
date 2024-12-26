@@ -3,33 +3,10 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { createApi } from 'unsplash-js';
 import { format } from 'date-fns';
 import { ImageIcon, TagIcon } from 'lucide-react';
-
-// 创建 Unsplash API 实例
-const unsplash = createApi({
-  accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY || '',
-});
-
-interface Collection {
-  id: string;
-  title: string;
-  description: string | null;
-  total_photos: number;
-  updated_at: string;
-  tags: Array<{
-    type: string;
-    title: string;
-  }>;
-  preview_photos: Array<{
-    id: string;
-    urls: {
-      regular: string;
-      thumb: string;
-    };
-  }>;
-}
+import { unsplash } from '@/lib/unsplash';
+import { Collection } from '@/lib/types/unsplash';
 
 function CollectionCard({ collection }: { collection: Collection }) {
   const [loadingStates, setLoadingStates] = useState<boolean[]>([true, true, true]);
