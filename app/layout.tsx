@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         <div className="max-w-3xl mx-auto px-2">{children}</div>
         <Footer/>
       </body>
-      <Script src="https://cdn.splitbee.io/sb.js" strategy="afterInteractive" />
+      {/* <Script src="https://cdn.splitbee.io/sb.js" strategy="afterInteractive" /> */}
     </html>
   );
 }

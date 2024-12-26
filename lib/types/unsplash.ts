@@ -11,6 +11,7 @@ export interface Photo {
   height: number;
   views?: number;
   downloads?: number;
+  likes?: number;
   exif?: {
     make?: string;
     model?: string;

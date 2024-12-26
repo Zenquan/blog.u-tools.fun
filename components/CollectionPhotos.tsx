@@ -6,6 +6,7 @@ import { unsplash } from '@/lib/unsplash';
 import { Photo } from '@/lib/types/unsplash';
 import { format } from 'date-fns';
 import ImagePreview from './ImagePreview';
+import CollectionPhotosSkeleton from './CollectionPhotosSkeleton';
 
 function PhotoCard({ photo, onClick }: { photo: Photo; onClick: () => void }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -150,9 +151,7 @@ export default function CollectionPhotos({ collectionId }: Props) {
 
   if (photos.length === 0 && !loading) {
     return (
-      <div className="px-3 py-8 text-center text-gray-500">
-        暂无照片
-      </div>
+      <CollectionPhotosSkeleton />
     );
   }
 
@@ -168,9 +167,7 @@ export default function CollectionPhotos({ collectionId }: Props) {
         ))}
       </div>
       {loading && (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-900 border-t-transparent"></div>
-        </div>
+        <CollectionPhotosSkeleton />
       )}
       {!hasMore && photos.length > 0 && (
         <div className="text-center pt-4 pb-14 text-gray-500">
