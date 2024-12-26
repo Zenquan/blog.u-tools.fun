@@ -1,11 +1,29 @@
 'use client';
 
 import { FC, useState, useEffect, TouchEvent } from 'react';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Camera, Eye, Download } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface ImagePreviewProps {
   src: string;
   alt: string;
+  photo: {
+    created_at: string;
+    views?: number;
+    downloads?: number;
+    exif?: {
+      make?: string;
+      model?: string;
+    };
+    tags?: Array<{
+      type: string;
+      title: string;
+    }>;
+    user?: {
+      name: string;
+      username: string;
+    };
+  };
   onClose: () => void;
   onPrev?: () => void;
   onNext?: () => void;
@@ -16,6 +34,7 @@ interface ImagePreviewProps {
 const ImagePreview: FC<ImagePreviewProps> = ({
   src,
   alt,
+  photo,
   onClose,
   onPrev,
   onNext,
@@ -89,7 +108,7 @@ const ImagePreview: FC<ImagePreviewProps> = ({
         <X size={24} />
       </button>
 
-      <div className="relative flex flex-col items-center gap-4">
+      <div className="relative flex flex-col items-center gap-4 w-full max-w-6xl px-4">
         <div className="relative">
           {isLoading && (
             <div className="absolute inset-0 backdrop-blur-lg bg-white/10 flex items-center justify-center">
@@ -99,10 +118,59 @@ const ImagePreview: FC<ImagePreviewProps> = ({
           <img
             src={src}
             alt={alt}
-            className="max-w-[90vw] max-h-[80vh] object-contain"
+            className="max-w-[90vw] max-h-[75vh] object-contain"
             onClick={(e) => e.stopPropagation()}
             onLoad={() => setIsLoading(false)}
           />
+        </div>
+
+        {/* 图片信息 */}
+        <div 
+          className="w-full text-white/80 flex flex-col gap-2"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* 基本信息 */}
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-4">
+              <time>
+                {format(new Date(photo.created_at), 'yyyy-MM-dd')}
+              </time>
+              {photo.exif?.make && photo.exif?.model && (
+                <div className="flex items-center gap-1">
+                  <Camera size={16} className="opacity-75" />
+                  <span>{photo.exif.make} {photo.exif.model}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              {photo.views !== undefined && (
+                <div className="flex items-center gap-1">
+                  <Eye size={16} className="opacity-75" />
+                  <span>{photo.views.toLocaleString()}</span>
+                </div>
+              )}
+              {photo.downloads !== undefined && (
+                <div className="flex items-center gap-1">
+                  <Download size={16} className="opacity-75" />
+                  <span>{photo.downloads.toLocaleString()}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 标签 */}
+          {photo.tags && photo.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {photo.tags.map(tag => (
+                <span 
+                  key={tag.title}
+                  className="px-2 py-1 text-xs bg-white/10 rounded-full hover:bg-white/20 transition-colors cursor-default"
+                >
+                  {tag.title}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* 切换按钮 */}

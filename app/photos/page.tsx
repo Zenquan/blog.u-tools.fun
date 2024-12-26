@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { titleFont } from '@/lib/utils/fonts';
-import PhotoList from '@/components/PhotoList';
+import CollectionList from '@/components/CollectionList';
 
 export const metadata: Metadata = {
   title: '摄影 - Zenquan\'s Blog',
@@ -14,13 +14,13 @@ export default async function Page() {
         <h1
           className={`flex flex-col text-3xl text-black leading-normal tracking-wider ${titleFont.className}`}
         >
-          摄影
+          摄影集
         </h1>
         <p className="mt-4 text-gray-600 text-sm">
           记录生活中的美好瞬间
         </p>
       </div>
-      <PhotoList />
+      <CollectionList />
     </>
   );
 } 

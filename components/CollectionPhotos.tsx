@@ -90,10 +90,10 @@ function PhotoCard({ photo, onClick }: { photo: Photo; onClick: () => void }) {
 }
 
 interface Props {
-  collectionId?: string;
+  collectionId: string;
 }
 
-export default function PhotoList({ collectionId }: Props) {
+export default function CollectionPhotos({ collectionId }: Props) {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -106,20 +106,11 @@ export default function PhotoList({ collectionId }: Props) {
     
     setLoading(true);
     try {
-      let result;
-      if (collectionId) {
-        result = await unsplash.collections.getPhotos({
-          collectionId,
-          page,
-          perPage: 12,
-        });
-      } else {
-        result = await unsplash.users.getPhotos({
-          username: 'zenquan',
-          page,
-          perPage: 12,
-        });
-      }
+      const result = await unsplash.collections.getPhotos({
+        collectionId,
+        page,
+        perPage: 12,
+      });
       
       if (result.response) {
         const newPhotos = result.response.results;
