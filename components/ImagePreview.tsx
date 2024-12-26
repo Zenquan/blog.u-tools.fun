@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { Camera, ChevronLeft, ChevronRight, Download, Eye, Heart, MapPin, X } from 'lucide-react';
@@ -30,22 +30,57 @@ export default function ImagePreview({
   hasNext = false,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { loading, photoDetails, photoStats } = usePhotoDetails(photo.id);
+  const { photoDetails, photoStats } = usePhotoDetails(photo.id);
+  const [isLoading, setIsLoading] = useState(true);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
+  // 处理键盘事件
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if (e.key === 'ArrowLeft' && hasPrev && onPrev) {
-        onPrev();
-      } else if (e.key === 'ArrowRight' && hasNext && onNext) {
-        onNext();
+      switch (e.key) {
+        case 'ArrowLeft':
+          if (hasPrev && onPrev) onPrev();
+          break;
+        case 'ArrowRight':
+          if (hasNext && onNext) onNext();
+          break;
+        case 'Escape':
+          onClose();
+          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose, onPrev, onNext, hasPrev, hasNext]);
+
+  // 处理触摸事件
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && hasNext && onNext) {
+      onNext();
+    } else if (isRightSwipe && hasPrev && onPrev) {
+      onPrev();
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
 
   return (
     <div
@@ -56,6 +91,9 @@ export default function ImagePreview({
           onClose();
         }
       }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <button
         className="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors"
@@ -64,33 +102,21 @@ export default function ImagePreview({
         <X size={24} />
       </button>
 
-      {hasPrev && onPrev && (
-        <button
-          className="absolute left-4 p-2 text-white/80 hover:text-white transition-colors"
-          onClick={onPrev}
-        >
-          <ChevronLeft size={32} />
-        </button>
-      )}
-
-      {hasNext && onNext && (
-        <button
-          className="absolute right-4 p-2 text-white/80 hover:text-white transition-colors"
-          onClick={onNext}
-        >
-          <ChevronRight size={32} />
-        </button>
-      )}
-
       <div className="relative max-w-[90vw] max-h-[90vh]">
         <div className="relative">
+          {isLoading && (
+            <div className="absolute inset-0 backdrop-blur-lg bg-white/10 flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-white/80 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
           <Image
             src={src}
             alt={alt}
             width={1200}
             height={800}
-            className="max-h-[90vh] w-auto object-contain"
-            priority
+            className="max-w-[90vw] max-h-[80vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+            onLoad={() => setIsLoading(false)}
           />
           
           {/* 照片信息 */}
