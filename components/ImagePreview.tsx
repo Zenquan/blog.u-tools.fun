@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { X } from 'lucide-react';
 
 interface ImagePreviewProps {
@@ -10,6 +10,8 @@ interface ImagePreviewProps {
 }
 
 const ImagePreview: FC<ImagePreviewProps> = ({ src, alt, onClose }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div 
       className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
@@ -22,12 +24,20 @@ const ImagePreview: FC<ImagePreviewProps> = ({ src, alt, onClose }) => {
       >
         <X size={24} />
       </button>
-      <img
-        src={src}
-        alt={alt}
-        className="max-w-[90vw] max-h-[90vh] object-contain"
-        onClick={(e) => e.stopPropagation()}
-      />
+      <div className="relative">
+        {isLoading && (
+          <div className="absolute inset-0 backdrop-blur-lg bg-white/10 flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-white/80 border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+        <img
+          src={src}
+          alt={alt}
+          className="max-w-[90vw] max-h-[90vh] object-contain"
+          onClick={(e) => e.stopPropagation()}
+          onLoad={() => setIsLoading(false)}
+        />
+      </div>
     </div>
   );
 };

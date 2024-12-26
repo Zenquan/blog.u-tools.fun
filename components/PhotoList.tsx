@@ -16,11 +16,63 @@ interface Photo {
   urls: {
     regular: string;
     full: string;
+    thumb: string;
   };
   created_at: string;
   alt_description: string;
   width: number;
   height: number;
+}
+
+function PhotoCard({ photo, onClick }: { photo: Photo; onClick: () => void }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <div 
+      className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+      onClick={onClick}
+    >
+      <div 
+        className="relative"
+        style={{
+          paddingBottom: `${(photo.height / photo.width) * 100}%`,
+        }}
+      >
+        {isLoading && (
+          <div className="absolute inset-0 z-10">
+            <div className="w-full h-full backdrop-blur-lg bg-white/10">
+              <Image
+                src={photo.urls.thumb}
+                alt={photo.alt_description || '照片'}
+                fill
+                className="object-cover opacity-50"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+              </div>
+            </div>
+          </div>
+        )}
+        <Image
+          src={photo.urls.regular}
+          alt={photo.alt_description || '照片'}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className={`
+            object-cover hover:scale-105 transition-transform duration-300
+            ${isLoading ? 'opacity-0' : 'opacity-100'}
+          `}
+          loading="lazy"
+          onLoadingComplete={() => setIsLoading(false)}
+        />
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
+        <time className="text-sm text-white/90">
+          {format(new Date(photo.created_at), 'yyyy-MM-dd')}
+        </time>
+      </div>
+    </div>
+  );
 }
 
 export default function PhotoList() {
@@ -105,32 +157,11 @@ export default function PhotoList() {
     <div className="px-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {photos.map((photo) => (
-          <div 
+          <PhotoCard
             key={`${photo.id}-${photo.created_at}`}
-            className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+            photo={photo}
             onClick={() => setPreviewPhoto(photo)}
-          >
-            <div 
-              className="relative"
-              style={{
-                paddingBottom: `${(photo.height / photo.width) * 100}%`,
-              }}
-            >
-              <Image
-                src={photo.urls.regular}
-                alt={photo.alt_description || '照片'}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
-              <time className="text-sm text-white/90">
-                {format(new Date(photo.created_at), 'yyyy-MM-dd')}
-              </time>
-            </div>
-          </div>
+          />
         ))}
       </div>
       {loading && (
