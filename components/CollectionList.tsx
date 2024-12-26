@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { createApi } from 'unsplash-js';
 import { format } from 'date-fns';
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, TagIcon } from 'lucide-react';
 
 // 创建 Unsplash API 实例
 const unsplash = createApi({
@@ -18,6 +18,10 @@ interface Collection {
   description: string | null;
   total_photos: number;
   updated_at: string;
+  tags: Array<{
+    type: string;
+    title: string;
+  }>;
   preview_photos: Array<{
     id: string;
     urls: {
@@ -121,6 +125,24 @@ function CollectionCard({ collection }: { collection: Collection }) {
           <h3 className="text-lg font-medium text-white mb-1">
             {collection.title}
           </h3>
+          {collection.tags && collection.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {collection.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag.title}
+                  className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-white/20 text-white/90"
+                >
+                  <TagIcon size={12} className="mr-1" />
+                  {tag.title}
+                </span>
+              ))}
+              {collection.tags.length > 3 && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-white/20 text-white/90">
+                  +{collection.tags.length - 3}
+                </span>
+              )}
+            </div>
+          )}
           <div className="flex items-center justify-between text-sm text-white/80">
             <span>{collection.total_photos} 张照片</span>
             <time>
