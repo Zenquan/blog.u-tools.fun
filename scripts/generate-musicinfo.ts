@@ -86,7 +86,7 @@ async function extractMusicInfo(input: string): Promise<MusicInfo> {
         
         if (audioInfo) {
           src = audioInfo.url;
-          const coverMatch = html.match(/src="(https:\/\/p3-luna\.douyinpic\.com\/[^"]+)"/);
+          const coverMatch = html.match(/src="(https:\/\/p[0-9]-luna\.douyinpic\.com\/[^"]+)"/);
           if (coverMatch) {
             coverUrl = coverMatch[1];
           }

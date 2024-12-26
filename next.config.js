@@ -34,6 +34,10 @@ const nextConfig = {
       'y.gtimg.cn',
     ],
   },
+  i18n: {
+    locales: ['zh-CN'],
+    defaultLocale: 'zh-CN',
+  },
 };
 
 module.exports = withContentlayer(nextConfig);
