@@ -94,7 +94,7 @@ export default function ImagePreview({
           />
           
           {/* 照片信息 */}
-          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
+          <div className="p-4 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
             <div className="flex flex-wrap gap-4 text-sm text-white/90">
               {/* 统计信息 */}
               <div className="flex items-center gap-4">
@@ -174,7 +174,7 @@ export default function ImagePreview({
 
         {/* 切换按钮 */}
         <div 
-          className="flex items-center gap-4"
+          className="flex items-center justify-center gap-4"
           onClick={e => e.stopPropagation()}
         >
           <button
