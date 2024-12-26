@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import { createApi } from 'unsplash-js';
 import { format } from 'date-fns';
 import { ImageIcon } from 'lucide-react';
@@ -17,6 +17,7 @@ interface Collection {
   title: string;
   description: string | null;
   total_photos: number;
+  updated_at: string;
   preview_photos: Array<{
     id: string;
     urls: {
@@ -24,13 +25,19 @@ interface Collection {
       thumb: string;
     };
   }>;
-  published_at: string;
-  updated_at: string;
 }
 
 function CollectionCard({ collection }: { collection: Collection }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const previewPhoto = collection.preview_photos?.[0];
+  const [loadingStates, setLoadingStates] = useState<boolean[]>([true, true, true]);
+  const previewPhotos = collection.preview_photos?.slice(0, 3) || [];
+
+  const handleImageLoad = (index: number) => {
+    setLoadingStates(prev => {
+      const newStates = [...prev];
+      newStates[index] = false;
+      return newStates;
+    });
+  };
 
   return (
     <Link 
@@ -39,36 +46,71 @@ function CollectionCard({ collection }: { collection: Collection }) {
     >
       <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all">
         <div className="relative aspect-[3/2]">
-          {previewPhoto ? (
-            <>
-              {isLoading && (
-                <div className="absolute inset-0 z-10">
-                  <div className="w-full h-full backdrop-blur-lg bg-white/10">
-                    <Image
-                      src={previewPhoto.urls.thumb}
-                      alt={collection.title}
-                      fill
-                      className="object-cover opacity-50"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+          {previewPhotos.length > 0 ? (
+            <div className="absolute inset-0 grid grid-cols-2 gap-0.5">
+              <div className="relative overflow-hidden">
+                {loadingStates[0] && (
+                  <div className="absolute inset-0 z-10">
+                    <div className="w-full h-full backdrop-blur-lg bg-white/10">
+                      <Image
+                        src={previewPhotos[0].urls.thumb}
+                        alt={collection.title}
+                        fill
+                        className="object-cover opacity-50"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-              <Image
-                src={previewPhoto.urls.regular}
-                alt={collection.title}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className={`
-                  object-cover group-hover:scale-105 transition-transform duration-300
-                  ${isLoading ? 'opacity-0' : 'opacity-100'}
-                `}
-                loading="lazy"
-                onLoadingComplete={() => setIsLoading(false)}
-              />
-            </>
+                )}
+                <Image
+                  src={previewPhotos[0].urls.regular}
+                  alt={collection.title}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16.67vw"
+                  className={`
+                    object-cover group-hover:scale-105 transition-transform duration-300
+                    ${loadingStates[0] ? 'opacity-0' : 'opacity-100'}
+                  `}
+                  loading="lazy"
+                  onLoadingComplete={() => handleImageLoad(0)}
+                />
+              </div>
+              <div className="grid grid-rows-2 gap-0.5">
+                {previewPhotos.slice(1, 3).map((photo, index) => (
+                  <div key={photo.id} className="relative overflow-hidden">
+                    {loadingStates[index + 1] && (
+                      <div className="absolute inset-0 z-10">
+                        <div className="w-full h-full backdrop-blur-lg bg-white/10">
+                          <Image
+                            src={photo.urls.thumb}
+                            alt={collection.title}
+                            fill
+                            className="object-cover opacity-50"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <Image
+                      src={photo.urls.regular}
+                      alt={collection.title}
+                      fill
+                      sizes="(max-width: 640px) 25vw, (max-width: 1024px) 12.5vw, 8.33vw"
+                      className={`
+                        object-cover group-hover:scale-105 transition-transform duration-300
+                        ${loadingStates[index + 1] ? 'opacity-0' : 'opacity-100'}
+                      `}
+                      loading="lazy"
+                      onLoadingComplete={() => handleImageLoad(index + 1)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           ) : (
             <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
               <ImageIcon size={32} className="text-gray-400" />
@@ -96,26 +138,44 @@ function CollectionCard({ collection }: { collection: Collection }) {
   );
 }
 
-export default function CollectionList() {
+interface Props {
+  username: string;
+}
+
+export default function CollectionList({ username }: Props) {
   const [collections, setCollections] = useState<Collection[]>([]);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const fetchCollections = async () => {
-    if (loading) return;
+    if (loading || !hasMore) return;
     
     setLoading(true);
     try {
       const result = await unsplash.users.getCollections({
-        username: 'zenquan',
-        page: 1,
-        perPage: 30,
+        username,
+        page,
+        perPage: 12,
       });
       
       if (result.response) {
-        setCollections(result.response.results);
+        const newCollections = result.response.results;
+        if (newCollections.length === 0) {
+          setHasMore(false);
+        } else {
+          // 使用 Set 来去重
+          const uniqueCollections = Array.from(
+            new Set([...collections, ...newCollections].map(c => JSON.stringify(c)))
+          ).map(c => JSON.parse(c));
+          
+          setCollections(uniqueCollections);
+          setPage(prev => prev + 1);
+        }
       }
     } catch (error) {
       console.error('Error fetching collections:', error);
+      setHasMore(false);
     } finally {
       setLoading(false);
     }
@@ -124,6 +184,20 @@ export default function CollectionList() {
   useEffect(() => {
     fetchCollections();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop
+        >= document.documentElement.offsetHeight - 1000
+      ) {
+        fetchCollections();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [collections, loading, hasMore]);
 
   if (collections.length === 0 && !loading) {
     return (
@@ -135,7 +209,7 @@ export default function CollectionList() {
 
   return (
     <div className="px-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {collections.map((collection) => (
           <CollectionCard
             key={collection.id}
@@ -146,6 +220,11 @@ export default function CollectionList() {
       {loading && (
         <div className="flex justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-900 border-t-transparent"></div>
+        </div>
+      )}
+      {!hasMore && collections.length > 0 && (
+        <div className="text-center pt-4 pb-14 text-gray-500">
+          没有更多摄影集了
         </div>
       )}
     </div>

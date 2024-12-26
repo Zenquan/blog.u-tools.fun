@@ -3,11 +3,11 @@ import { titleFont } from '@/lib/utils/fonts';
 import CollectionList from '@/components/CollectionList';
 
 export const metadata: Metadata = {
-  title: '摄影 - Zenquan\'s Blog',
+  title: '摄影集 - Zenquan\'s Blog',
   description: '记录生活中的美好瞬间',
 };
 
-export default async function Page() {
+export default function Page() {
   return (
     <>
       <div className="pt-10 pb-6 px-3">
@@ -16,11 +16,11 @@ export default async function Page() {
         >
           摄影集
         </h1>
-        <p className="mt-4 text-gray-600 text-sm">
+        <p className="mt-4 text-gray-600">
           记录生活中的美好瞬间
         </p>
       </div>
-      <CollectionList />
+      <CollectionList username="zenquan" />
     </>
   );
 } 
