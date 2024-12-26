@@ -23,6 +23,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN" className={inter.variable}>
+      <head>
+        <meta 
+          name="viewport" 
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, touch-action: manipulation" 
+        />
+      </head>
       <body>
         <Menu />
         <div className="max-w-3xl mx-auto px-2">{children}</div>
