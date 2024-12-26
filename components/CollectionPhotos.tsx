@@ -2,27 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { createApi } from 'unsplash-js';
+import { unsplash } from '@/lib/unsplash';
+import { Photo } from '@/lib/types/unsplash';
 import { format } from 'date-fns';
 import ImagePreview from './ImagePreview';
-
-// 创建 Unsplash API 实例
-const unsplash = createApi({
-  accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY || '',
-});
-
-interface Photo {
-  id: string;
-  urls: {
-    regular: string;
-    full: string;
-    thumb: string;
-  };
-  created_at: string;
-  alt_description: string;
-  width: number;
-  height: number;
-}
 
 function PhotoCard({ photo, onClick }: { photo: Photo; onClick: () => void }) {
   const [isLoading, setIsLoading] = useState(true);
