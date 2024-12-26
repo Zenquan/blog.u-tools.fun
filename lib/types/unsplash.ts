@@ -9,8 +9,8 @@ export interface Photo {
   alt_description: string;
   width: number;
   height: number;
-  views: number;
-  downloads: number;
+  views?: number;
+  downloads?: number;
   exif?: {
     make?: string;
     model?: string;

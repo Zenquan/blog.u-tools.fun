@@ -1,29 +1,17 @@
 'use client';
 
-import { FC, useState, useEffect, TouchEvent } from 'react';
-import { X, ChevronLeft, ChevronRight, Camera, Eye, Download } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { format } from 'date-fns';
+import { Camera, ChevronLeft, ChevronRight, Download, Eye, Heart, MapPin, X } from 'lucide-react';
+import { Photo } from '@/lib/types/unsplash';
+import { formatNumber } from '@/lib/utils/format';
+import { usePhotoDetails } from '@/lib/hooks/usePhotoDetails';
 
-interface ImagePreviewProps {
+interface Props {
   src: string;
   alt: string;
-  photo: {
-    created_at: string;
-    views?: number;
-    downloads?: number;
-    exif?: {
-      make?: string;
-      model?: string;
-    };
-    tags?: Array<{
-      type: string;
-      title: string;
-    }>;
-    user?: {
-      name: string;
-      username: string;
-    };
-  };
+  photo: Photo;
   onClose: () => void;
   onPrev?: () => void;
   onNext?: () => void;
@@ -31,7 +19,7 @@ interface ImagePreviewProps {
   hasNext?: boolean;
 }
 
-const ImagePreview: FC<ImagePreviewProps> = ({
+export default function ImagePreview({
   src,
   alt,
   photo,
@@ -40,24 +28,18 @@ const ImagePreview: FC<ImagePreviewProps> = ({
   onNext,
   hasPrev = false,
   hasNext = false,
-}) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+}: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { loading, photoDetails, photoStats } = usePhotoDetails(photo.id);
 
-  // 处理键盘事件
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case 'ArrowLeft':
-          if (hasPrev && onPrev) onPrev();
-          break;
-        case 'ArrowRight':
-          if (hasNext && onNext) onNext();
-          break;
-        case 'Escape':
-          onClose();
-          break;
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.key === 'ArrowLeft' && hasPrev && onPrev) {
+        onPrev();
+      } else if (e.key === 'ArrowRight' && hasNext && onNext) {
+        onNext();
       }
     };
 
@@ -65,101 +47,118 @@ const ImagePreview: FC<ImagePreviewProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose, onPrev, onNext, hasPrev, hasNext]);
 
-  // 处理触摸事件
-  const handleTouchStart = (e: TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe && hasNext && onNext) {
-      onNext();
-    } else if (isRightSwipe && hasPrev && onPrev) {
-      onPrev();
-    }
-
-    setTouchStart(null);
-    setTouchEnd(null);
-  };
-
   return (
-    <div 
-      className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
-      onClick={onClose}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+      onClick={(e) => {
+        if (e.target === containerRef.current) {
+          onClose();
+        }
+      }}
     >
       <button
-        onClick={onClose}
         className="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors"
-        aria-label="关闭预览"
+        onClick={onClose}
       >
         <X size={24} />
       </button>
 
-      <div className="relative flex flex-col items-center gap-4 w-full max-w-6xl px-4">
+      {hasPrev && onPrev && (
+        <button
+          className="absolute left-4 p-2 text-white/80 hover:text-white transition-colors"
+          onClick={onPrev}
+        >
+          <ChevronLeft size={32} />
+        </button>
+      )}
+
+      {hasNext && onNext && (
+        <button
+          className="absolute right-4 p-2 text-white/80 hover:text-white transition-colors"
+          onClick={onNext}
+        >
+          <ChevronRight size={32} />
+        </button>
+      )}
+
+      <div className="relative max-w-[90vw] max-h-[90vh]">
         <div className="relative">
-          {isLoading && (
-            <div className="absolute inset-0 backdrop-blur-lg bg-white/10 flex items-center justify-center">
-              <div className="w-8 h-8 border-2 border-white/80 border-t-transparent rounded-full animate-spin" />
-            </div>
-          )}
-          <img
+          <Image
             src={src}
             alt={alt}
-            className="max-w-[90vw] max-h-[75vh] object-contain"
-            onClick={(e) => e.stopPropagation()}
-            onLoad={() => setIsLoading(false)}
+            width={1200}
+            height={800}
+            className="max-h-[90vh] w-auto object-contain"
+            priority
           />
-        </div>
+          
+          {/* 照片信息 */}
+          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
+            <div className="flex flex-wrap gap-4 text-sm text-white/90">
+              {/* 统计信息 */}
+              <div className="flex items-center gap-4">
+                {photoStats && (
+                  <>
+                    <span className="inline-flex items-center">
+                      <Eye size={16} className="mr-1" />
+                      {formatNumber(photoStats.views.total)}
+                    </span>
+                    <span className="inline-flex items-center">
+                      <Download size={16} className="mr-1" />
+                      {formatNumber(photoStats.downloads.total)}
+                    </span>
+                    <span className="inline-flex items-center">
+                      <Heart size={16} className="mr-1" />
+                      {formatNumber(photoStats.likes.total)}
+                    </span>
+                  </>
+                )}
+              </div>
 
-        {/* 图片信息 */}
-        <div 
-          className="w-full text-white/80 flex flex-col gap-2"
-          onClick={e => e.stopPropagation()}
-        >
-          {/* 基本信息 */}
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
-              <time>
-                {format(new Date(photo.created_at), 'yyyy-MM-dd')}
-              </time>
-              {photo.exif?.make && photo.exif?.model && (
-                <div className="flex items-center gap-1">
-                  <Camera size={16} className="opacity-75" />
-                  <span>{photo.exif.make} {photo.exif.model}</span>
+              {/* 相机信息 */}
+              {photoDetails?.exif && (
+                <div className="flex flex-wrap items-center gap-3">
+                  {(photoDetails.exif.make || photoDetails.exif.model) && (
+                    <span className="inline-flex items-center">
+                      <Camera size={16} className="mr-1" />
+                      {[photoDetails.exif.make, photoDetails.exif.model].filter(Boolean).join(' ')}
+                    </span>
+                  )}
+                  {photoDetails.exif.focal_length && (
+                    <span>{photoDetails.exif.focal_length}mm</span>
+                  )}
+                  {photoDetails.exif.aperture && (
+                    <span>ƒ/{photoDetails.exif.aperture}</span>
+                  )}
+                  {photoDetails.exif.exposure_time && (
+                    <span>{photoDetails.exif.exposure_time}s</span>
+                  )}
+                  {photoDetails.exif.iso && (
+                    <span>ISO {photoDetails.exif.iso}</span>
+                  )}
+                </div>
+              )}
+
+              {/* 位置信息 */}
+              {photoDetails?.location && (photoDetails.location.city || photoDetails.location.country) && (
+                <div className="flex items-center">
+                  <MapPin size={16} className="mr-1" />
+                  <span>
+                    {[photoDetails.location.city, photoDetails.location.country].filter(Boolean).join(', ')}
+                  </span>
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4">
-              {photo.views !== undefined && (
-                <div className="flex items-center gap-1">
-                  <Eye size={16} className="opacity-75" />
-                  <span>{photo.views.toLocaleString()}</span>
-                </div>
-              )}
-              {photo.downloads !== undefined && (
-                <div className="flex items-center gap-1">
-                  <Download size={16} className="opacity-75" />
-                  <span>{photo.downloads.toLocaleString()}</span>
-                </div>
-              )}
-            </div>
+
+            {/* 时间信息 */}
+            <time className="block mt-2 text-sm text-white/80" dateTime={photo.created_at}>
+              {format(new Date(photo.created_at), 'yyyy-MM-dd')}
+            </time>
           </div>
 
           {/* 标签 */}
-          {photo.tags && photo.tags.length > 0 && (
+          {/* {photo.tags && photo.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {photo.tags.map(tag => (
                 <span 
@@ -170,7 +169,7 @@ const ImagePreview: FC<ImagePreviewProps> = ({
                 </span>
               ))}
             </div>
-          )}
+          )} */}
         </div>
 
         {/* 切换按钮 */}
@@ -208,6 +207,4 @@ const ImagePreview: FC<ImagePreviewProps> = ({
       </div>
     </div>
   );
-};
-
-export default ImagePreview; 
+} 

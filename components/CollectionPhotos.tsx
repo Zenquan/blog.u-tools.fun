@@ -2,19 +2,34 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { createApi } from 'unsplash-js';
 import { format } from 'date-fns';
-import { Camera, Download, Eye, MapPin } from 'lucide-react';
 import ImagePreview from './ImagePreview';
-import { unsplash } from '@/lib/unsplash';
-import { Photo } from '@/lib/types/unsplash';
-import { formatNumber } from '@/lib/utils/format';
+
+// 创建 Unsplash API 实例
+const unsplash = createApi({
+  accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY || '',
+});
+
+interface Photo {
+  id: string;
+  urls: {
+    regular: string;
+    full: string;
+    thumb: string;
+  };
+  created_at: string;
+  alt_description: string;
+  width: number;
+  height: number;
+}
 
 function PhotoCard({ photo, onClick }: { photo: Photo; onClick: () => void }) {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div 
-      className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer group"
+      className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
       onClick={onClick}
     >
       <div 
@@ -44,73 +59,17 @@ function PhotoCard({ photo, onClick }: { photo: Photo; onClick: () => void }) {
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className={`
-            object-cover transition-transform duration-300 group-hover:scale-105
+            object-cover hover:scale-105 transition-transform duration-300
             ${isLoading ? 'opacity-0' : 'opacity-100'}
           `}
           loading="lazy"
           onLoadingComplete={() => setIsLoading(false)}
         />
-        {/* 图片信息浮层 */}
-        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-          {/* 顶部信息 */}
-          <div className="p-3 bg-gradient-to-b from-black/60 via-black/40 to-transparent">
-            <div className="flex flex-wrap gap-2 text-xs text-white/90">
-              {/* 浏览和下载信息 */}
-              <div className="flex items-center gap-3">
-                <span className="inline-flex items-center">
-                  <Eye size={14} className="mr-1" />
-                  {formatNumber(photo.views)}
-                </span>
-                <span className="inline-flex items-center">
-                  <Download size={14} className="mr-1" />
-                  {formatNumber(photo.downloads)}
-                </span>
-              </div>
-              {/* 相机信息 */}
-              {photo.exif && (photo.exif.make || photo.exif.model) && (
-                <div className="flex items-center">
-                  <Camera size={14} className="mr-1" />
-                  <span>
-                    {[photo.exif.make, photo.exif.model].filter(Boolean).join(' ')}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* 底部信息 */}
-          <div className="p-3 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
-            {/* 拍摄参数 */}
-            {photo.exif && (
-              <div className="flex flex-wrap items-center gap-2 mb-2 text-xs text-white/90">
-                {photo.exif.focal_length && (
-                  <span>{photo.exif.focal_length}mm</span>
-                )}
-                {photo.exif.aperture && (
-                  <span>ƒ/{photo.exif.aperture}</span>
-                )}
-                {photo.exif.exposure_time && (
-                  <span>{photo.exif.exposure_time}s</span>
-                )}
-                {photo.exif.iso && (
-                  <span>ISO {photo.exif.iso}</span>
-                )}
-              </div>
-            )}
-            {/* 位置信息 */}
-            {photo.location && (photo.location.city || photo.location.country) && (
-              <div className="flex items-center text-xs text-white/90 mb-2">
-                <MapPin size={14} className="mr-1" />
-                <span>
-                  {[photo.location.city, photo.location.country].filter(Boolean).join(', ')}
-                </span>
-              </div>
-            )}
-            <time className="block text-sm text-white/80" dateTime={photo.created_at}>
-              {format(new Date(photo.created_at), 'yyyy-MM-dd')}
-            </time>
-          </div>
-        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
+        <time className="text-sm text-white/90">
+          {format(new Date(photo.created_at), 'yyyy-MM-dd')}
+        </time>
       </div>
     </div>
   );
@@ -138,7 +97,6 @@ export default function CollectionPhotos({ collectionId }: Props) {
         page,
         perPage: 12,
       });
-      console.log("🚀 ~ fetchPhotos ~ result:", result)
       
       if (result.response) {
         const newPhotos = result.response.results;
