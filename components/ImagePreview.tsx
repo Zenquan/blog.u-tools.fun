@@ -110,7 +110,8 @@ export default function ImagePreview({
               <Image
                 src={photo.urls.thumb}
                 alt={photo.alt_description || '照片'}
-                fill
+                width={1200}
+                height={800}
                 className="object-cover opacity-50"
               />
               <div className="absolute inset-0 flex items-center justify-center">
