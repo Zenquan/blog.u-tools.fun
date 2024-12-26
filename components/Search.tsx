@@ -43,7 +43,7 @@ export default function Search() {
         ref={inputRef}
         type="search"
         placeholder="搜索文章... 按 / 键快速搜索"
-        className="w-full px-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-gray-400"
+        className="w-full px-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-gray-400 text-base"
         defaultValue={keyword}
         onChange={(e) => onSearch(e.target.value)}
       />
