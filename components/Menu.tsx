@@ -16,6 +16,10 @@ const LIST = [
     title: '周刊',
     href: '/weekly',
   },
+  {
+    title: '摄影',
+    href: '/photos',
+  },
   // {
   //   title: '关于',
   //   href: '/about',

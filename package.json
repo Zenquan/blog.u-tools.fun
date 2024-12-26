@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "contentlayer": "contentlayer2 dev", 
+    "contentlayer": "contentlayer2 dev",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -25,7 +25,8 @@
     "rehype-pretty-code": "^0.14.0",
     "remark-external-links": "^9.0.1",
     "remark-gfm": "^4.0.0",
-    "shiki": "^1.22.1"
+    "shiki": "^1.22.1",
+    "unsplash-js": "^7.0.19"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",

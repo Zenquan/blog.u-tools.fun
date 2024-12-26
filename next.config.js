@@ -32,8 +32,9 @@ const nextConfig = {
       'p6-luna.douyinpic.com',
       'p9-luna.douyinpic.com',
       'y.gtimg.cn',
+      'images.unsplash.com',
     ],
-  }
+  },
 };
 
 module.exports = withContentlayer(nextConfig);
