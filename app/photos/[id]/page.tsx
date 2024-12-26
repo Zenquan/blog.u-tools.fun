@@ -13,6 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const result = await unsplash.collections.get({ collectionId: id });
     const collection = result.response;
+    console.log("🚀 ~ generateMetadata ~ collection:", JSON.stringify(collection))
     return {
       title: `${collection?.title || '摄影集'} - Zenquan's Blog`,
       description: collection?.description || '摄影集详情',
@@ -31,6 +32,7 @@ export default async function Page({ params }: Props) {
 
   try {
     const result = await unsplash.collections.get({ collectionId: id });
+    console.log("🚀 ~ Page ~ result:", result)
     if (result.response) {
       collection = result.response;
     }
@@ -41,7 +43,7 @@ export default async function Page({ params }: Props) {
   if (!collection) {
     return (
       <div className="px-3 py-8 text-center text-gray-500">
-        未找到该摄影��
+        未找到该摄影集合
       </div>
     );
   }
