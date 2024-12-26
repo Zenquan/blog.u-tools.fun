@@ -104,20 +104,33 @@ export default function ImagePreview({
 
       <div className="relative max-w-[90vw] max-h-[90vh]">
         <div className="relative">
-          {isLoading && (
-            <div className="absolute inset-0 backdrop-blur-lg bg-white/10 flex items-center justify-center">
-              <div className="w-8 h-8 border-2 border-white/80 border-t-transparent rounded-full animate-spin" />
+        {isLoading && (
+          <div className="inset-0 z-10">
+            <div className="w-full h-full backdrop-blur-lg bg-white/10">
+              <Image
+                src={photo.urls.thumb}
+                alt={photo.alt_description || '照片'}
+                fill
+                className="object-cover opacity-50"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+              </div>
             </div>
-          )}
-          <Image
-            src={src}
-            alt={alt}
-            width={1200}
-            height={800}
-            className="max-w-[90vw] max-h-[80vh] object-contain"
-            onClick={(e) => e.stopPropagation()}
-            onLoad={() => setIsLoading(false)}
-          />
+          </div>
+        )}
+        <Image
+          src={photo.urls.regular}
+          alt={photo.alt_description || '照片'}
+          width={1200}
+          height={800}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className={`
+            object-cover hover:scale-105 transition-transform duration-300
+            ${isLoading ? 'opacity-0' : 'opacity-100'}
+          `}
+          onLoadingComplete={() => setIsLoading(false)}
+        />
           
           {/* 照片信息 */}
           <div className="p-4 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
@@ -136,7 +149,7 @@ export default function ImagePreview({
                     </span>
                     <span className="inline-flex items-center">
                       <Heart size={16} className="mr-1" />
-                      {formatNumber(photoStats.likes.total)}
+                      {formatNumber(photo.likes)}
                     </span>
                   </>
                 )}
