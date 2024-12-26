@@ -27,6 +27,7 @@ export async function generateStaticParams() {
 
 export default async function Page(props) {
   const params = await props.params 
+  console.log("🚀 ~ Page ~ params:", params)
   const tag = decodeURIComponent(params.tag);
   const blogs = allBlogs
     .filter((blog) => {
