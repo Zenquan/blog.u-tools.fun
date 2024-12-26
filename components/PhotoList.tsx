@@ -2,14 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { createApi } from 'unsplash-js';
+import { unsplash } from '@/lib/unsplash';
 import { format } from 'date-fns';
 import ImagePreview from './ImagePreview';
-
-// 创建 Unsplash API 实例
-const unsplash = createApi({
-  accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY || '',
-});
 
 interface Photo {
   id: string;

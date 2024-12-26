@@ -1,19 +1,8 @@
 import { Metadata } from 'next';
-import { createApi } from 'unsplash-js';
+import { unsplash } from '@/lib/unsplash';
+import { Collection } from '@/lib/types/unsplash';
 import { titleFont } from '@/lib/utils/fonts';
 import CollectionPhotos from '@/components/CollectionPhotos';
-
-// 创建 Unsplash API 实例
-const unsplash = createApi({
-  accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY || '',
-});
-
-interface Collection {
-  id: string;
-  title: string;
-  description: string | null;
-  total_photos: number;
-}
 
 interface Props {
   params: Promise<{ id: string }>;
