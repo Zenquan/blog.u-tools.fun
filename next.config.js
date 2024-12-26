@@ -33,6 +33,7 @@ const nextConfig = {
       'p9-luna.douyinpic.com',
       'y.gtimg.cn',
       'images.unsplash.com',
+      'plus.unsplash.com',
     ],
   },
 };

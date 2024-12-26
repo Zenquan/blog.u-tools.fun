@@ -7,10 +7,16 @@ import { format } from 'date-fns';
 import { ImageIcon, TagIcon } from 'lucide-react';
 import { unsplash } from '@/lib/unsplash';
 import { Collection } from '@/lib/types/unsplash';
+import CollectionSkeleton from '@/components/CollectionSkeleton';
 
 function CollectionCard({ collection }: { collection: Collection }) {
+  const [mounted, setMounted] = useState(false);
   const [loadingStates, setLoadingStates] = useState<boolean[]>([true, true, true]);
   const previewPhotos = collection.preview_photos?.slice(0, 3) || [];
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleImageLoad = (index: number) => {
     setLoadingStates(prev => {
@@ -19,6 +25,10 @@ function CollectionCard({ collection }: { collection: Collection }) {
       return newStates;
     });
   };
+
+  if (!mounted) {
+    return <CollectionSkeleton />;
+  }
 
   return (
     <Link 
@@ -146,6 +156,11 @@ export default function CollectionList({ username }: Props) {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const fetchCollections = async () => {
     if (loading || !hasMore) return;
@@ -185,6 +200,8 @@ export default function CollectionList({ username }: Props) {
   }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop
@@ -196,7 +213,19 @@ export default function CollectionList({ username }: Props) {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [collections, loading, hasMore]);
+  }, [collections, loading, hasMore, mounted]);
+
+  if (!mounted) {
+    return (
+      <div className="px-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <CollectionSkeleton />
+          <CollectionSkeleton />
+          <CollectionSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   if (collections.length === 0 && !loading) {
     return (
@@ -215,12 +244,14 @@ export default function CollectionList({ username }: Props) {
             collection={collection}
           />
         ))}
+        {loading && (
+          <>
+            <CollectionSkeleton />
+            <CollectionSkeleton />
+            <CollectionSkeleton />
+          </>
+        )}
       </div>
-      {loading && (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-900 border-t-transparent"></div>
-        </div>
-      )}
       {!hasMore && collections.length > 0 && (
         <div className="text-center pt-4 pb-14 text-gray-500">
           没有更多摄影集了
