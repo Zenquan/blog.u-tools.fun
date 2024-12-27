@@ -13,7 +13,7 @@ const slugifyWithCounter = () => {
 
   return (str: string) => {
     const base = str
-      .toLowerCase()
+      ?.toLowerCase()
       .trim()
       .replace(/\s+/g, '-')
       .replace(/[^\w\-]+/g, '')
