@@ -110,7 +110,7 @@ export default function ImagePreview({
         <X size={24} />
       </button>
 
-      <div className="relative max-w-[90vw] max-h-[90vh]">
+      <div className="relative max-w-[90vw] sm:max-w-[50vw] max-h-[90vh]">
         <div className="relative">
         {isLoading && (
           <div className="inset-0 z-10">
@@ -128,22 +128,20 @@ export default function ImagePreview({
             </div>
           </div>
         )}
-        <Image
+        <img
           src={photo.urls.regular}
           alt={photo.alt_description || '照片'}
-          width={500}
-          height={500}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className={`
             object-cover hover:scale-105 transition-transform duration-300
             ${isLoading ? 'opacity-0' : 'opacity-100'}
           `}
-          onLoadingComplete={() => setIsLoading(false)}
+          onLoad={() => setIsLoading(false)}
         />
           
           {/* 照片信息 */}
           <div className="py-4 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
-            <div className="flex flex-wrap gap-4 text-sm text-white/90">
+            <div className="flex flex-col flex-wrap gap-4 text-sm text-white/90">
               {/* 统计信息 */}
               <div className="flex items-center gap-4">
                 {photoStats && (
