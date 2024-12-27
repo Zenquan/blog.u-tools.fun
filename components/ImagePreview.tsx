@@ -142,7 +142,7 @@ export default function ImagePreview({
         />
           
           {/* 照片信息 */}
-          <div className="p-4 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
+          <div className="py-4 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
             <div className="flex flex-wrap gap-4 text-sm text-white/90">
               {/* 统计信息 */}
               <div className="flex items-center gap-4">
