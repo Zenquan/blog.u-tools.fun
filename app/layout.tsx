@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import Menu from '../components/Menu';
 import './globals.css';
 import Footer from '../components/Footer';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -18,9 +19,8 @@ export const metadata: Metadata = {
   viewport: {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover',
+    maximumScale: 5,
+    userScalable: true,
   },
   other: {
     'baidu-site-verification': '',
@@ -31,11 +31,26 @@ export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN" className={inter.variable}>
       <body>
-        <Menu />
-        <div className="max-w-3xl mx-auto px-2">{children}</div>
-        <Footer/>
+        <ErrorBoundary>
+          <Menu />
+          <div className="max-w-3xl mx-auto px-2">{children}</div>
+          <Footer/>
+        </ErrorBoundary>
+        <Script
+          id="vconsole"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                (function () {
+                  var vConsole = new window.VConsole();
+                })();
+              }
+            `,
+          }}
+        />
+        <Script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js" strategy="beforeInteractive" />
       </body>
-      {/* <Script src="https://cdn.splitbee.io/sb.js" strategy="afterInteractive" /> */}
     </html>
   );
 }

@@ -12,31 +12,30 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [musicInfo, setMusicInfo] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const fetchMusicInfo = async () => {
       try {
+        setError(null);
         const response = await fetch(`/api/music?url=${encodeURIComponent(url)}`);
-        console.log("🚀 ~ fetchMusicInfo ~ response:", response)
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const text = await response.text(); // 先获取文本响应
+        const text = await response.text();
         if (!text) {
           throw new Error('Empty response');
         }
-        try {
-          const data = JSON.parse(text); // 尝试解析 JSON
-          if (!data) {
-            throw new Error('Invalid music info');
-          }
-          setMusicInfo(data);
-        } catch (parseError) {
-          console.error('Failed to parse music info:', text, parseError);
+        const data = JSON.parse(text);
+        if (!data) {
+          throw new Error('Invalid music info');
         }
+        setMusicInfo(data);
       } catch (error) {
         console.error('Failed to fetch music info:', error);
+        setError('音乐信息加载失败，请稍后重试');
+        setMusicInfo(null);
       }
     };
 
@@ -57,9 +56,10 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
       setProgress(0);
     };
 
-    const handleError = (e: ErrorEvent) => {
+    const handleError = (e: Event) => {
       console.error('Audio error:', e);
       setIsPlaying(false);
+      setError('音频加载失败，请稍后重试');
     };
 
     audio.addEventListener('timeupdate', updateProgress);
@@ -73,22 +73,33 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
     };
   }, []);
 
+  if (error) {
+    return (
+      <div className="my-8 p-4 bg-red-50 rounded-lg text-red-600 text-sm">
+        {error}
+      </div>
+    );
+  }
+
   if (!musicInfo) return null;
   const { title, artist, cover, src, platform } = musicInfo;
   const proxyUrl = src ? `/api/proxy?url=${encodeURIComponent(src)}` : '';
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (!audioRef.current || !src) return;
 
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch(error => {
-        console.error('Play error:', error);
-        setIsPlaying(false);
-      });
+    try {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        await audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    } catch (error) {
+      console.error('Play error:', error);
+      setIsPlaying(false);
+      setError('播放失败，请稍后重试');
     }
-    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -125,33 +136,33 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
           </div>
 
           {/* 信息 */}
-          <div className="flex-1 min-w-0 pr-[15px]">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 truncate m-0">
-                  {title}
-                </h3>
-                <p className="mt-1.5 text-sm text-gray-500 flex items-center gap-2">
-                  <span>{artist}</span>
-                  <span className="inline-block w-1 h-1 rounded-full bg-gray-300" />
-                  <span>{platform}</span>
-                </p>
-              </div>
+          <div className="flex-1 min-w-0 py-4 pr-6">
+            <div className="text-base font-medium text-gray-900 truncate">
+              {title}
             </div>
+            <div className="text-sm text-gray-500 truncate">
+              {artist} · {platform}
+            </div>
+            {/* 进度条 */}
             {src && (
-              <div>
-                <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-black rounded-full transition-all duration-100"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-                <audio ref={audioRef} src={proxyUrl} preload="metadata" />
+              <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gray-500 rounded-full transition-all duration-100"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
             )}
           </div>
         </div>
       </div>
+      {proxyUrl && (
+        <audio
+          ref={audioRef}
+          src={proxyUrl}
+          preload="metadata"
+          onError={() => setError('音频加载失败，请稍后重试')}
+        />
+      )}
     </div>
   );
 };
