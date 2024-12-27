@@ -36,6 +36,14 @@ const nextConfig = {
       'plus.unsplash.com',
     ],
   },
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // 优化生产环境构建
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
+  reactStrictMode: true,
 };
 
 module.exports = withContentlayer(nextConfig);

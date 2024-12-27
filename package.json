@@ -5,7 +5,8 @@
   "scripts": {
     "contentlayer": "contentlayer2 dev",
     "dev": "next dev",
-    "build": "next build",
+    "clean": "rm -rf .next",
+    "build": "npm run clean && next build",
     "start": "next start",
     "lint": "next lint",
     "generate-icons": "esno scripts/generate-icons.ts",
@@ -52,6 +53,18 @@
     "extends": [
       "next",
       "prettier"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }
