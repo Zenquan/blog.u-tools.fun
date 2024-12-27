@@ -359,7 +359,7 @@ $breakpoints: (
     
     @include respond-to('desktop') {
         font-size: px2rem(36px);
-    }
+  }
 }
 ```
 
