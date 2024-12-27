@@ -118,8 +118,8 @@ export default function ImagePreview({
               <Image
                 src={photo.urls.thumb}
                 alt={photo.alt_description || '照片'}
-                width={1200}
-                height={800}
+                width={500}
+                height={500}
                 className="object-cover opacity-50"
               />
               <div className="absolute inset-0 flex items-center justify-center">
@@ -131,8 +131,8 @@ export default function ImagePreview({
         <Image
           src={photo.urls.regular}
           alt={photo.alt_description || '照片'}
-          width={1200}
-          height={800}
+          width={500}
+          height={500}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className={`
             object-cover hover:scale-105 transition-transform duration-300

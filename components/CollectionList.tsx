@@ -218,7 +218,8 @@ export default function CollectionList({ username }: Props) {
   if (!mounted) {
     return (
       <div className="px-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <CollectionSkeleton />
           <CollectionSkeleton />
           <CollectionSkeleton />
           <CollectionSkeleton />
@@ -237,7 +238,7 @@ export default function CollectionList({ username }: Props) {
 
   return (
     <div className="px-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {collections.map((collection) => (
           <CollectionCard
             key={collection.id}
@@ -246,6 +247,7 @@ export default function CollectionList({ username }: Props) {
         ))}
         {loading && (
           <>
+            <CollectionSkeleton />
             <CollectionSkeleton />
             <CollectionSkeleton />
             <CollectionSkeleton />
