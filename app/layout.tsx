@@ -41,11 +41,12 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                (function () {
+              (function() {
+                var searchParams = new URLSearchParams(window.location.search);
+                if (searchParams.get('devtool') === 'true') {
                   var vConsole = new window.VConsole();
-                })();
-              }
+                }
+              })();
             `,
           }}
         />

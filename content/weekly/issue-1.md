@@ -10,7 +10,7 @@ description: 这是我的周刊的第一期，我会在这分享近期看到的�
 
 <MusicPlayer url="《怎么你》@汽水音乐 https://v.douyin.com/CeiJm5DVR/"/>
 
-<MusicPlayer url="陈默之《怎么你》 https://c6.y.qq.com/base/fcgi-bin/u?__=VEaessteB9bS @QQ音乐"/>
+<!-- <MusicPlayer url="陈默之《怎么你》 https://c6.y.qq.com/base/fcgi-bin/u?__=VEaessteB9bS @QQ音乐"/> -->
 
 ## 技术
 

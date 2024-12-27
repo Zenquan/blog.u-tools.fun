@@ -40,7 +40,7 @@ const nextConfig = {
   compiler: {
     removeConsole: false,
   },
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
   poweredByHeader: false,
   reactStrictMode: true,
   webpack: (config, { dev, isServer }) => {
