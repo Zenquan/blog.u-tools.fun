@@ -11,6 +11,8 @@ interface MusicPlayerProps {
 const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [musicInfo, setMusicInfo] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -42,36 +44,53 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
     fetchMusicInfo();
   }, [url]);
 
+  // 播放状态变化时的处理
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const updateProgress = () => {
-      const value = (audio.currentTime / audio.duration) * 100;
-      setProgress(value || 0);
-    };
+    if (isPlaying) {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.error('Play error:', error);
+          setIsPlaying(false);
+          setError('播放失败，请稍后重试');
+        });
+      }
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying]);
 
-    const handleEnded = () => {
-      setIsPlaying(false);
-      setProgress(0);
-    };
+  const handleTimeUpdate = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    const currentTime = audio.currentTime;
+    const duration = audio.duration || 0;
+    const progressValue = (currentTime / duration) * 100;
+    
+    setCurrentTime(currentTime);
+    setProgress(progressValue);
+  };
 
-    const handleError = (e: Event) => {
-      console.error('Audio error:', e);
-      setIsPlaying(false);
-      setError('音频加载失败，请稍后重试');
-    };
+  const handleLoadedMetadata = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    setDuration(audio.duration);
+  };
 
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('ended', handleEnded);
-    audio.addEventListener('error', handleError);
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setProgress(0);
+    setCurrentTime(0);
+  };
 
-    return () => {
-      audio.removeEventListener('timeupdate', updateProgress);
-      audio.removeEventListener('ended', handleEnded);
-      audio.removeEventListener('error', handleError);
-    };
-  }, []);
+  const handleError = () => {
+    setIsPlaying(false);
+    setError('音频加载失败，请稍后重试');
+  };
 
   if (error) {
     return (
@@ -85,21 +104,16 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
   const { title, artist, cover, src, platform } = musicInfo;
   const proxyUrl = src ? `/api/proxy?url=${encodeURIComponent(src)}` : '';
 
-  const togglePlay = async () => {
+  const togglePlay = () => {
     if (!audioRef.current || !src) return;
+    setIsPlaying(!isPlaying);
+  };
 
-    try {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        await audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    } catch (error) {
-      console.error('Play error:', error);
-      setIsPlaying(false);
-      setError('播放失败，请稍后重试');
-    }
+  // 格式化时间
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -143,13 +157,19 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
             <div className="text-sm text-gray-500 truncate">
               {artist} · {platform}
             </div>
-            {/* 进度条 */}
+            {/* 进度条和时间 */}
             {src && (
-              <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gray-500 rounded-full transition-all duration-100"
-                  style={{ width: `${progress}%` }}
-                />
+              <div className="mt-2">
+                <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gray-500 rounded-full transition-all duration-100"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <div className="mt-1 flex justify-between text-xs text-gray-500">
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
               </div>
             )}
           </div>
@@ -160,7 +180,10 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
           ref={audioRef}
           src={proxyUrl}
           preload="metadata"
-          onError={() => setError('音频加载失败，请稍后重试')}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={handleEnded}
+          onError={handleError}
         />
       )}
     </div>
