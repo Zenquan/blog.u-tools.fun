@@ -14,25 +14,24 @@ tags:
 
 ## 整体方案对比
 
-下图展示了两种方案的核心流程对比：
+下面分别展示两种方案的核心流程：
 
 ```mermaid
 graph TB
-    subgraph "方案一: 离线包 + LocalServer"
-    A[App 启动] --> B[版本检查]
-    B --> C{需要更新?}
-    C -->|是| D[下载离线包]
-    C -->|否| E[启动本地服务器]
-    D --> E
-    E --> F[WebView加载]
-    end
+    A[App 启动] --> B[版本检查] 
+    A[App 启动] --> C[WebView预加载] --> G[WebView加载或者WebView池管理]
+    B --> D{需要更新?}
+    D -->|是| E[下载离线包]
+    D -->|否| F[启动本地服务器]
+    E --> F
+    F --> G[WebView加载或者WebView池管理]
 
-    subgraph "方案二: WebView预加载 + 缓存"
-    G[App 启动] --> H[WebView预加载]
-    H --> I[缓存策略]
-    I --> J[页面加载]
-    J --> K[WebView池管理]
-    end
+    H[App 启动] --> I[WebView预加载] --> M[WebView加载或者WebView池管理]
+    I --> J{缓存需要更新?}
+    J -->|是| K[请求资源]
+    J -->|否| L[复用资源]
+    K --> M[WebView加载或者WebView池管理]
+    L --> M
 ```
 
 ## 方案一：离线包 + LocalServer
@@ -414,6 +413,54 @@ webView.settings.apply {
 
 ##### WebView 预加载
 
+WebView 预加载是一种优化技术，通过提前初始化和加载 WebView 来减少用户等待时间。下面详细说明其工作流程：
+
+```mermaid
+sequenceDiagram
+    participant App
+    participant WebView
+    participant Cache
+    
+    App->>WebView: 1. 创建实例
+    App->>WebView: 2. 配置参数
+    App->>WebView: 3. 预加载基础URL
+    
+    WebView->>Cache: 4. 检查缓存
+    alt 缓存命中
+        Cache-->>WebView: 使用缓存资源
+    else 缓存未命中
+        WebView->>WebView: 网络请求资源
+        WebView->>Cache: 更新缓存
+    end
+    
+    WebView-->>App: 5. 加载完成
+    Note over App,WebView: 进入预加载池
+    
+    alt 需要使用
+        App->>WebView: 6. 切换到目标URL
+        App->>App: 7. 创建新预加载
+    else 继续等待
+        Note over WebView: 保持预加载状态
+    end
+```
+
+#### 缓存机制
+
+```mermaid
+flowchart TD
+    A[请求资源] --> B{检查内存缓存}
+    B -->|命中| C[使用内存缓存]
+    B -->|未命中| D{检查磁盘缓存}
+    D -->|命中| E[使用磁盘缓存]
+    D -->|未命中| F[网络请求]
+    F --> G[更新缓存]
+    E --> H[返回资源]
+    C --> H
+    G --> H
+```
+
+#### 关键代码实现
+
 ```kotlin
   // 预加载基础URL
   WebViewManager.preloadUrl(context, baseUrl) {
@@ -421,6 +468,7 @@ webView.settings.apply {
   }  
 ```
 
+1. **预加载配置**
 ```kotlin
     fun preloadUrl(context: Context, url: String, onLoadComplete: () -> Unit) {
         // 如果已经有预加载的 WebView，直接使用
@@ -562,6 +610,23 @@ webView.settings.apply {
     }
 ```
 
+#### 性能优化建议
+
+1. **内存管理**
+   - 控制预加载实例数量
+   - 及时释放不需要的资源
+   - 监控内存使用情况
+
+2. **加载优化**
+   - 选择合适的预加载时机
+   - 优化基础 URL 的资源大小
+   - 实现智能预加载策略
+
+3. **缓存优化**
+   - 合理设置缓存策略
+   - 定期清理过期缓存
+   - 优先使用本地缓存
+
 ##### 设置缓存
 
 ```kotlin
@@ -683,7 +748,7 @@ graph LR
     H -->|存在| I[复用WebView]
     H -->|不存在| J[创建新WebView]
     J --> K{达到上限?}
-    K -->|是| L[复用最不活跃]
+    K -->|是| L[复��最不活跃]
     K -->|否| M[加入池中]
 ```
 
@@ -721,7 +786,7 @@ graph LR
   - 支持页面状态保持
 - 注意事项：
   - 需要设计刷新机制
-  - 内存使用需要监控
+  - 内���使用需要监控
 
 ## 总结与建议
 
