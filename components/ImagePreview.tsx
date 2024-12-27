@@ -110,7 +110,10 @@ export default function ImagePreview({
         <X size={24} />
       </button>
 
-      <div className="relative max-w-[90vw] sm:max-w-[50vw] max-h-[90vh]">
+      <div className={`
+        relative max-h-[90vh]
+        ${photo.height > photo.width * 1.2 ? 'max-w-[90vw] sm:max-w-[25vw]' : 'max-w-[90vw] sm:max-w-[50vw]'}
+      `}>
         <div className="relative">
         {isLoading && (
           <div className="inset-0 z-10">
@@ -128,12 +131,14 @@ export default function ImagePreview({
             </div>
           </div>
         )}
-        <img
+        <Image
           src={photo.urls.regular}
           alt={photo.alt_description || '照片'}
+          width={500}
+          height={500}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className={`
-            object-cover hover:scale-105 transition-transform duration-300
+            max-w-full max-h-[90vh] object-contain
             ${isLoading ? 'opacity-0' : 'opacity-100'}
           `}
           onLoad={() => setIsLoading(false)}
