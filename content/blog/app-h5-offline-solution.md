@@ -1,6 +1,7 @@
 ---
 title: Hybrid App 中 H5离线方案探索
 date: 2024-11-23
+update_at: 2024-12-27
 description: 本文深入探讨了 Hybrid App 中 H5 离线化的两种实现方案，包括离线包 + LocalServer 和 WebView 预加载 + 缓存资源方案的详细对比与实践经验。
 tags:
   - front-end
