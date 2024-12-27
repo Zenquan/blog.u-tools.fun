@@ -139,7 +139,7 @@ function CollectionCard({ collection }: { collection: Collection }) {
         </div>
       </div>
       {collection.description && (
-        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+        <p className="my-2 text-sm text-gray-600 line-clamp-2">
           {collection.description}
         </p>
       )}
