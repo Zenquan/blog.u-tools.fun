@@ -28,6 +28,16 @@ export default function RootLayout({ children }) {
           name="viewport" 
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, touch-action: manipulation" 
         />
+        <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/vConsole/3.12.1/vconsole.min.js"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // 仅在非生产环境启用 vConsole
+            if (window.location.hostname !== 'blog.u-tools.fun') {
+              var vConsole = new window.VConsole();
+              console.log('vConsole is enabled');
+            }
+          `
+        }} />
       </head>
       <body>
         <Menu />
