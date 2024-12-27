@@ -1,9 +1,10 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Image from 'next/image';
 import MusicPlayer from './MusicPlayer';
+import mermaid from 'mermaid';
 
 const slugifyWithCounter = () => {
   const slugs = new Map<string, number>();
@@ -26,6 +27,52 @@ const slugifyWithCounter = () => {
 interface MDXProps {
   code: string;
 }
+
+// Mermaid 组件
+const Mermaid: FC<{ code: string }> = ({ code }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose',
+      });
+      mermaid.run({
+        nodes: [ref.current],
+      });
+    }
+  }, [code]);
+
+  return (
+    <div className="my-4" ref={ref}>
+      {code}
+    </div>
+  );
+};
+
+const extractTextContent = (node: any): string => {
+  if (typeof node === 'string') return node;
+  if (!node) return '';
+  
+  // 处理 props.children 是字符串的情况
+  if (node.props?.children && typeof node.props.children === 'string') {
+    return node.props.children;
+  }
+  
+  // 处理 props.children 是数组的情况
+  if (Array.isArray(node.props?.children)) {
+    return node.props.children.map(extractTextContent).join('');
+  }
+  
+  // 处理 props.children 是对象的情况
+  if (node.props?.children?.props?.children) {
+    return extractTextContent(node.props.children);
+  }
+  
+  return '';
+};
 
 const MDX: FC<MDXProps> = ({ code }) => {
   try {
@@ -51,6 +98,16 @@ const MDX: FC<MDXProps> = ({ code }) => {
               <h3 {...props} id={slugify(props.children)} />
             ),
             MusicPlayer,
+            pre: ({ children, ...props }: any) => {
+              const language = children?.props?.['data-language'];
+              
+              if (language === 'mermaid') {
+                const mermaidCode = extractTextContent(children);
+                return <Mermaid code={mermaidCode} />;
+              }
+              
+              return <pre {...props}>{children}</pre>;
+            },
           }}
         />
       </div>
