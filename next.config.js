@@ -40,10 +40,17 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // 优化生产环境构建
-  productionBrowserSourceMaps: false,
+  // 启用 sourcemap
+  productionBrowserSourceMaps: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  webpack: (config, { dev, isServer }) => {
+    // 开发环境启用详细的 sourcemap
+    if (dev && !isServer) {
+      config.devtool = 'eval-source-map';
+    }
+    return config;
+  },
 };
 
 module.exports = withContentlayer(nextConfig);
