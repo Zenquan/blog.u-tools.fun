@@ -117,7 +117,7 @@ const TOC: FC<TOCProps> = ({ isMobile = false }) => {
       <>
         {/* 移动端触发按钮 */}
         <button
-          className="fixed right-4 bottom-4 z-50 p-3 bg-white rounded-full shadow-lg border"
+          className="fixed right-4 bottom-4 z-10 p-3 bg-white rounded-full shadow-lg border"
           onClick={() => setIsOpen(true)}
           aria-label="打开目录"
         >
@@ -126,7 +126,7 @@ const TOC: FC<TOCProps> = ({ isMobile = false }) => {
 
         {/* 移动端弹出层 */}
         {isOpen && (
-          <div className="fixed inset-0 z-50 toc-overlay">
+          <div className="fixed inset-0 z-10 toc-overlay">
             <div className="absolute inset-0 bg-black/20" onClick={() => setIsOpen(false)} />
             <div className="absolute right-0 top-0 bottom-0 w-[80%] max-w-[300px] bg-white shadow-lg toc-drawer">
               <div className="py-4 flex flex-col h-full">
