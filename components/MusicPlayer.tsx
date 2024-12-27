@@ -5,28 +5,43 @@ import { Music, Play, Pause } from 'lucide-react';
 import Image from 'next/image';
 
 interface MusicPlayerProps {
-  title: string;
-  artist: string;
-  cover: string;
-  platform: string;
-  link: string;
-  src?: string;
+  url: string;
 }
 
-const MusicPlayer: FC<MusicPlayerProps> = ({
-  title,
-  artist,
-  cover,
-  platform,
-  link,
-  src,
-}) => {
+const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [musicInfo, setMusicInfo] = useState<any>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // 构建代理 URL
-  const proxyUrl = src ? `/api/proxy?url=${encodeURIComponent(src)}` : '';
+  useEffect(() => {
+    const fetchMusicInfo = async () => {
+      try {
+        const response = await fetch(`/api/music?url=${encodeURIComponent(url)}`);
+        console.log("🚀 ~ fetchMusicInfo ~ response:", response)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const text = await response.text(); // 先获取文本响应
+        if (!text) {
+          throw new Error('Empty response');
+        }
+        try {
+          const data = JSON.parse(text); // 尝试解析 JSON
+          if (!data) {
+            throw new Error('Invalid music info');
+          }
+          setMusicInfo(data);
+        } catch (parseError) {
+          console.error('Failed to parse music info:', text, parseError);
+        }
+      } catch (error) {
+        console.error('Failed to fetch music info:', error);
+      }
+    };
+
+    fetchMusicInfo();
+  }, [url]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -57,6 +72,10 @@ const MusicPlayer: FC<MusicPlayerProps> = ({
       audio.removeEventListener('error', handleError);
     };
   }, []);
+
+  if (!musicInfo) return null;
+  const { title, artist, cover, src, platform } = musicInfo;
+  const proxyUrl = src ? `/api/proxy?url=${encodeURIComponent(src)}` : '';
 
   const togglePlay = () => {
     if (!audioRef.current || !src) return;

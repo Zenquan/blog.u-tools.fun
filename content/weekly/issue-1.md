@@ -8,21 +8,9 @@ description: 这是我的周刊的第一期，我会在这分享近期看到的�
 
 <hr />
 
-<MusicPlayer
-  title="怎么你"
-  artist="陈默之"
-  cover="https://p3-luna.douyinpic.com/img/tos-cn-v-2774c002/osMAgKid7CiQQFLz5D2QSftAAUaxALeCfXCGIo~c5_375x375.jpg"
-  platform="汽水音乐 "
-  src="https://v11-luna.douyinvod.com/519dd0f056e30bab550fa2f78cda0554/676ce28b/video/tos/cn/tos-cn-ve-2774/oAXexkgzdapQACGADNALYUfbgeCCMtICQAXGiF/?a=8478&ch=0&cr=5&dr=0&cd=0%7C0%7C0%7C5&br=126&bt=126&ft=QTwr3yh8ffPdHK~2N12NvAq-antLjrKNP8oNRkaVXl8jljVhWL6&mime_type=audio_mp4&qs=6&rc=NDlmZzloNmlkOzhoZmg7OEBpajk1NGs5cnc7cjMzODlkNEA2Y2A0YC1hNTIxMzAxMjYuYSMxLS1kMmRrMmhgLS1kYS1zcw%3D%3D&btag=80000e00028000&dy_q=1735098913&l=20241225115513FFCC06F352E9B101E03A"
-/>
+<MusicPlayer url="《怎么你》@汽水音乐 https://v.douyin.com/CeiJm5DVR/"/>
 
-<MusicPlayer
-  title="怎么你"
-  artist="陈默之"
-  cover="https://y.gtimg.cn/music/photo_new/T002R150x150M000003mWb110sq7Ms_1.jpg?max_age=2592000"
-  platform="QQ音乐"
-  src="http://aqqmusic.tc.qq.com/C400000go7Er2DM3y9.m4a?guid=2569053662&vkey=1846A5B71915EBCD64A0C4D36F3C8674866C6DA35A9001D03301C4C3FF068E12DECE784AFFAFBAEEEB86227297477289CB7F1ECFC80A1EEA__v21ea05c9e&uin=&fromtag=123032&src=C400001sKA9X1O0sL0.m4a"
-/>
+<MusicPlayer url="陈默之《怎么你》 https://c6.y.qq.com/base/fcgi-bin/u?__=VEaessteB9bS @QQ音乐"/>
 
 ## 技术
 
