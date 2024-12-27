@@ -9,8 +9,6 @@ import { formatNumber } from '@/lib/utils/format';
 import { usePhotoDetails } from '@/lib/hooks/usePhotoDetails';
 
 interface Props {
-  src: string;
-  alt: string;
   photo: Photo;
   onClose: () => void;
   onPrev?: () => void;
@@ -20,8 +18,6 @@ interface Props {
 }
 
 export default function ImagePreview({
-  src,
-  alt,
   photo,
   onClose,
   onPrev,
@@ -203,9 +199,11 @@ export default function ImagePreview({
             </div>
 
             {/* 时间信息 */}
-            <time className="block mt-2 text-sm text-white/80" dateTime={photo.created_at}>
-              {format(new Date(photo.created_at), 'yyyy-MM-dd')}
-            </time>
+            {photo.created_at && (
+              <time className="block mt-2 text-sm text-white/80" dateTime={photo.created_at}>
+                {format(new Date(photo.created_at), 'yyyy-MM-dd')}
+              </time>
+            )}
           </div>
 
           {/* 标签 */}
@@ -224,7 +222,7 @@ export default function ImagePreview({
         </div>
 
         {/* 切换按钮 */}
-        <div 
+        {(hasPrev || hasNext) && <div 
           className="flex items-center justify-center gap-4"
           onClick={e => e.stopPropagation()}
         >
@@ -255,6 +253,7 @@ export default function ImagePreview({
             <ChevronRight size={24} />
           </button>
         </div>
+        }
       </div>
     </div>
   );

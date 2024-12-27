@@ -1,10 +1,11 @@
 'use client';
 
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Image from 'next/image';
 import MusicPlayer from './MusicPlayer';
 import mermaid from 'mermaid';
+import ImagePreview from './ImagePreview';
 
 const slugifyWithCounter = () => {
   const slugs = new Map<string, number>();
@@ -31,6 +32,8 @@ interface MDXProps {
 // Mermaid 组件
 const Mermaid: FC<{ code: string }> = ({ code }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const [svgString, setSvgString] = useState<string>('');
 
   useEffect(() => {
     if (ref.current) {
@@ -39,16 +42,59 @@ const Mermaid: FC<{ code: string }> = ({ code }) => {
         theme: 'default',
         securityLevel: 'loose',
       });
+      
       mermaid.run({
         nodes: [ref.current],
+      }).then(() => {
+        if (ref.current) {
+          const svg = ref.current.querySelector('svg');
+          if (svg) {
+            // 添加白色背景
+            svg.style.backgroundColor = 'white';
+            // 获取 SVG 字符串
+            const svgStr = svg.outerHTML;
+            setSvgString(svgStr);
+          }
+        }
       });
     }
   }, [code]);
 
+  const handleClick = () => {
+    setShowPreview(true);
+  };
+
+  // 创建一个模拟的 Photo 对象
+  const mockPhoto = {
+    id: 'mermaid-diagram',
+    urls: {
+      regular: `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgString)))}`,
+      full: `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgString)))}`,
+      thumb: `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgString)))}`,
+    },
+    width: 1200,
+    height: 800,
+    alt_description: 'Mermaid Diagram',
+    user: {
+      name: 'Mermaid',
+      username: 'mermaid',
+    }
+  };
+
   return (
-    <div className="my-4" ref={ref}>
-      {code}
-    </div>
+    <>
+      <div 
+        className="my-4 cursor-pointer hover:opacity-80 transition-opacity bg-white" 
+        onClick={handleClick} 
+        ref={ref}
+      >
+        {code}
+      </div>
+      
+      {showPreview && svgString && (
+        <ImagePreview photo={mockPhoto} onClose={() => setShowPreview(false)}/>
+      )}
+    </>
   );
 };
 

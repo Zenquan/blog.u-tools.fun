@@ -5,7 +5,7 @@ export interface Photo {
     full: string;
     thumb: string;
   };
-  created_at: string;
+  created_at?: string;
   alt_description: string;
   width: number;
   height: number;

@@ -177,8 +177,6 @@ export default function CollectionPhotos({ collectionId }: Props) {
       )}
       {previewPhoto && (
         <ImagePreview
-          src={previewPhoto.urls.full}
-          alt={previewPhoto.alt_description || '照片'}
           photo={previewPhoto}
           onClose={handleClosePreview}
           onPrev={handlePrevPhoto}
