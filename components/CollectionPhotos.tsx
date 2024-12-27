@@ -157,13 +157,14 @@ export default function CollectionPhotos({ collectionId }: Props) {
 
   return (
     <div className="px-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
         {photos.map((photo) => (
-          <PhotoCard
-            key={`${photo.id}-${photo.created_at}`}
-            photo={photo}
-            onClick={() => handlePreview(photo)}
-          />
+          <div key={`${photo.id}-${photo.created_at}`} className="mb-4 break-inside-avoid">
+            <PhotoCard
+              photo={photo}
+              onClick={() => handlePreview(photo)}
+            />
+          </div>
         ))}
       </div>
       {loading && (

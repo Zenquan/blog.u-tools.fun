@@ -3,9 +3,9 @@ title: Hybrid App 中 H5离线方案探索
 date: 2024-11-23
 description: 这是我对于App H5的离线方案的探索思考。也实践了一番。
 tags:
-  - Front end
-  - App
-  - Webview
+  - front-end
+  - app
+  - webview
 ---
 这是我在公司级项目中调研的Hybrid App 中 H5离线方案，虽然这里写的是demo，但是基本的落地思路就是这样。最终取得的效果也是相当的好。
 
