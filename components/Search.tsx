@@ -39,14 +39,18 @@ export default function Search() {
 
   return (
     <div className="relative">
-      <input
-        ref={inputRef}
-        type="search"
-        placeholder="搜索文章... 按 / 键快速搜索"
-        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-gray-400 text-base"
-        defaultValue={keyword}
-        onChange={(e) => onSearch(e.target.value)}
-      />
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm">
+        <input
+          ref={inputRef}
+          type="search"
+          placeholder="搜索文章... 按 / 键快速搜索"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-gray-400 text-base"
+          defaultValue={keyword}
+          onChange={(e) => onSearch(e.target.value)}
+          enterKeyHint="search"
+          inputMode="search"
+        />
+      </div>
     </div>
   );
 }
