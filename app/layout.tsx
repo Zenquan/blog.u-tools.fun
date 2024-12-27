@@ -32,10 +32,10 @@ export default function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{
           __html: `
             // 仅在非生产环境启用 vConsole
-            if (window.location.hostname !== 'blog.u-tools.fun') {
+            // if (window.location.hostname !== 'blog.u-tools.fun') {
               var vConsole = new window.VConsole();
               console.log('vConsole is enabled');
-            }
+            // }
           `
         }} />
       </head>
