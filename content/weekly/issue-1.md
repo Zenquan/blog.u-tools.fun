@@ -12,7 +12,7 @@ description: 本期周刊关注开源 3D 建模软件、AI 驱动的前端开发
 
 ## 开源项目
 
-### [FreeCAD - 强大的开源 3D 参数化建模工具](https://github.com/FreeCAD/FreeCAD)
+#### [FreeCAD - 强大的开源 3D 参数化建模工具](https://github.com/FreeCAD/FreeCAD)
 
 FreeCAD 是一个专业级的开源参数化 3D 建模软件。它主要面向机械工程和产品设计领域，但也适用于其他工程领域（如建筑、有限元分析等）的各类项目。
 
@@ -26,7 +26,7 @@ FreeCAD 是一个专业级的开源参数化 3D 建模软件。它主要面向�
 **个人评价：**
 作为一款开源的 3D CAD 软件，FreeCAD 在功能性和易用性上都达到了相当高的水平。虽然与商业软件相比还有一定差距，但其开源特性和可扩展性使其成为一个非常有潜力的选择，特别适合学习和中小型项目使用。
 
-### [Blender - 专业级开源 3D 创作套件](https://www.blender.org/)
+#### [Blender - 专业级开源 3D 创作套件](https://www.blender.org/)
 
 Blender 是一款功能强大的开源 3D 创作软件，支持建模、动画、渲染、后期处理等全流程创作。
 
@@ -40,7 +40,7 @@ Blender 是一款功能强大的开源 3D 创作软件，支持建模、动画�
 **应用场景：**
 从独立游戏开发到电影特效制作，Blender 都展现出了惊人的潜力。近年来在商业项目中的应用也越来越多。
 
-### [OpenCV - 计算机视觉开源库](https://github.com/opencv/opencv)
+#### [OpenCV - 计算机视觉开源库](https://github.com/opencv/opencv)
 
 OpenCV 是最流行的计算机视觉开源库之一，提供了丰富的图像处理和机器学习功能。
 
@@ -53,7 +53,7 @@ OpenCV 是最流行的计算机视觉开源库之一，提供了丰富的图像�
 
 ## AI 工具
 
-### [WeaveFox - AI 驱动的前端开发助手](https://weavefox.ai/)
+#### [WeaveFox - AI 驱动的前端开发助手](https://weavefox.ai/)
 
 WeaveFox 是一个创新的 AI 驱动的前端 UI 开发工具，它能够帮助开发者快速创建和优化用户界面。
 
@@ -66,7 +66,7 @@ WeaveFox 是一个创新的 AI 驱动的前端 UI 开发工具，它能够帮助
 **使用体验：**
 工具的 AI 能力确实能帮助提高开发效率，特别是在快速原型设计阶段。但目前还处于早期阶段，生成的代码质量和可维护性还需要进一步提升。
 
-### [GitHub Copilot - AI 编程助手](https://github.com/features/copilot)
+#### [GitHub Copilot - AI 编程助手](https://github.com/features/copilot)
 
 GitHub Copilot 是一款强大的 AI 编程助手，近期宣布对所有公共仓库开发者免费开放，并升级到 GPT-4 和 Claude 3.5 Sonnet 模型支持。现在开发者可以直接在 GitHub 网页端使用，极大提升了可访问性。
 
@@ -89,7 +89,7 @@ GitHub Copilot 是一款强大的 AI 编程助手，近期宣布对所有公共�
    - JetBrains IDE
    - Neovim
 
-### [Claude - 新一代 AI 助手](https://claude.ai)
+#### [Claude - 新一代 AI 助手](https://claude.ai)
 
 Claude 是 Anthropic 开发的 AI 助手，在编程、写作和分析方面表现出色。
 
@@ -101,7 +101,7 @@ Claude 是 Anthropic 开发的 AI 助手，在编程、写作和分析方面表�
 
 ## 技术动态
 
-### [Next.js 14 发布](https://nextjs.org/blog/next-14)
+#### [Next.js 14 发布](https://nextjs.org/blog/next-14)
 
 Next.js 发布了 14.0 版本，带来了多项重要更新：
 - 本地文件缓存性能提升 40%
@@ -112,21 +112,21 @@ Next.js 发布了 14.0 版本，带来了多项重要更新：
 **影响分析：**
 这次更新主要聚焦于性能优化和开发体验提升，特别是 Server Actions 的稳定发布，为全栈开发提供了更好的解决方案。
 
-### [TypeScript 5.3 正式发布](https://devblogs.microsoft.com/typescript/announcing-typescript-5-3/)
+#### [TypeScript 5.3 正式发布](https://devblogs.microsoft.com/typescript/announcing-typescript-5-3/)
 
 新版本带来了多个实用特性：
 - Import Attributes 支持
 - 解构参数的类型推导优化
 - Switch(true) 类型收窄增强
 
-### [Rust 1.75 发布](https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html)
+#### [Rust 1.75 发布](https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html)
 
 Rust 1.75 版本带来多项改进：
 - async-fn 在 trait 中的支持
 - 性能优化和稳定性提升
 - 标准库功能扩展
 
-### [WebAssembly 2.0 规范确定](https://webassembly.github.io/spec/core/)
+#### [WebAssembly 2.0 规范确定](https://webassembly.github.io/spec/core/)
 
 WebAssembly 2.0 规范正式确定，引入多项重要特性：
 - 垃圾回收接口
@@ -136,7 +136,7 @@ WebAssembly 2.0 规范正式确定，引入多项重要特性：
 
 ## 工具推荐
 
-### 1. [Bun 1.0 - 现代 JavaScript 运行时](https://bun.sh)
+#### 1. [Bun 1.0 - 现代 JavaScript 运行时](https://bun.sh)
 
 Bun 作为一个全新的 JavaScript 运行时，在性能和开发体验上都有不错的表现：
 - 启动速度快
@@ -144,7 +144,7 @@ Bun 作为一个全新的 JavaScript 运行时，在性能和开发体验上都�
 - 原生 TypeScript 支持
 - 兼容 Node.js API
 
-### 2. [Biome - 前端工具链的新选择](https://biomejs.dev)
+#### 2. [Biome - 前端工具链的新选择](https://biomejs.dev)
 
 Biome 是一个由 Rust 编写的前端工具链，旨在替代 ESLint、Prettier 等工具：
 - 极快的执行速度
@@ -152,7 +152,7 @@ Biome 是一个由 Rust 编写的前端工具链，旨在替代 ESLint、Prettie
 - 内置格式化功能
 - 可扩展的规则系统
 
-### 3. [Tauri - 轻量级桌面应用框架](https://tauri.app)
+#### 3. [Tauri - 轻量级桌面应用框架](https://tauri.app)
 
 Tauri 是新一代的跨平台桌面应用开发框架：
 - 极小的应用体积
@@ -160,7 +160,7 @@ Tauri 是新一代的跨平台桌面应用开发框架：
 - 强大的安全特性
 - 灵活的前端技术栈
 
-### 4. [Rspack - 高性能 JavaScript 打包工具](https://www.rspack.dev)
+#### 4. [Rspack - 高性能 JavaScript 打包工具](https://www.rspack.dev)
 
 字节跳动开源的 Rust 实现的 Webpack 替代品：
 - 极致的构建性能
@@ -170,7 +170,7 @@ Tauri 是新一代的跨平台桌面应用开发框架：
 
 ## 思考与观点
 
-### 开源 CAD 软件的未来
+#### 开源 CAD 软件的未来
 
 开源 CAD 软件如 FreeCAD 的发展让我们看到了一些有趣的趋势：
 
@@ -184,7 +184,7 @@ Tauri 是新一代的跨平台桌面应用开发框架：
    - 自动化程度不断提高
    - 降低了专业工具的使用门槛
 
-### AI 开发工具的现状与展望
+#### AI 开发工具的现状与展望
 
 随着 WeaveFox 等工具的出现，AI 辅助开发正在经历快速发展：
 
@@ -198,7 +198,7 @@ Tauri 是新一代的跨平台桌面应用开发框架：
    - 更好的开发流程集成
    - 更强的可定制性和扩展性
 
-### AI 编程助手的竞争与人机协作
+#### AI 编程助手的竞争与人机协作
 
 随着 Cursor、WindCurf、GitHub Copilot 等工具的崛起，AI 编程助手领域竞争日益激烈，但也凸显出人类开发者的不可替代性：
 
@@ -220,7 +220,7 @@ Tauri 是新一代的跨平台桌面应用开发框架：
    - 保持对代码的掌控
    - 持续学习和适应
 
-### Web 开发趋势观察
+#### Web 开发趋势观察
 
 1. **全栈框架的演进**
    - 更强调开发体验
