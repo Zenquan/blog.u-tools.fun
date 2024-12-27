@@ -28,7 +28,7 @@ export default async function Page(props) {
         <p className="mt-2 text-gray-500 text-sm font-mono">{weekly.date}</p>
       </div>
       <article className="px-2 prose max-w-none">
-        <MDX code={weekly.body.code} />
+        <MDX code={weekly.body.code} date={weekly.date} update_at={weekly.update_at} />
       </article>
     </>
   );

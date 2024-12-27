@@ -28,6 +28,10 @@ export const Blog = defineDocumentType(() => ({
       },
       required: true,
     },
+    update_at: {
+      type: 'string',
+      required: false,
+    }
   },
   computedFields: {
     url: {
@@ -58,6 +62,10 @@ export const Weekly = defineDocumentType(() => ({
       type: 'string',
       required: true,
     },
+    update_at: {
+      type: 'string',
+      required: false,
+    }
   },
   computedFields: {
     url: {

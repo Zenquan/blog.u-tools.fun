@@ -39,7 +39,7 @@ export default async function Page(props) {
       </div>
       <div className="flex flex-col lg:flex-row justify-between gap-8">
         <article className="w-full px-2 prose max-w-none lg:max-w-[720px]">
-          <MDX code={blog.body.code} />
+          <MDX code={blog.body.code} date={blog.date} update_at={blog.update_at} />
         </article>
         <div className="hidden lg:block w-[260px] flex-shrink-0">
           <TOC />

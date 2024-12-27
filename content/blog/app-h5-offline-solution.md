@@ -804,3 +804,5 @@ graph LR
    - 探索 ServiceWorker 方案
    - 研究 PWA 技术应用
    - 优化增量更新机制
+
+<ArticleFooter />

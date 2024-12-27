@@ -6,6 +6,7 @@ import Image from 'next/image';
 import MusicPlayer from './MusicPlayer';
 import mermaid from 'mermaid';
 import ImagePreview from './ImagePreview';
+import ArticleFooter from './ArticleFooter';
 
 const slugifyWithCounter = () => {
   const slugs = new Map<string, number>();
@@ -27,6 +28,8 @@ const slugifyWithCounter = () => {
 
 interface MDXProps {
   code: string;
+  date: string;
+  update_at?: string;
 }
 
 // Mermaid 组件
@@ -120,7 +123,7 @@ const extractTextContent = (node: any): string => {
   return '';
 };
 
-const MDX: FC<MDXProps> = ({ code }) => {
+const MDX: FC<MDXProps> = ({ code, date, update_at }) => {
   try {
     const Component = useMDXComponent(code);
     const slugify = slugifyWithCounter();
@@ -154,6 +157,7 @@ const MDX: FC<MDXProps> = ({ code }) => {
               
               return <pre {...props}>{children}</pre>;
             },
+            ArticleFooter: () => <ArticleFooter date={date} update_at={update_at}/>,
           }}
         />
       </div>
