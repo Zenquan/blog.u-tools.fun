@@ -117,7 +117,7 @@ const TOC: FC<TOCProps> = ({ isMobile = false }) => {
       <>
         {/* 移动端触发按钮 */}
         <button
-          className="fixed right-4 bottom-4 z-5 p-3 bg-white rounded-full shadow-lg border"
+          className="fixed right-4 bottom-4 z-50 p-3 bg-white rounded-full shadow-lg border"
           onClick={() => setIsOpen(true)}
           aria-label="打开目录"
         >

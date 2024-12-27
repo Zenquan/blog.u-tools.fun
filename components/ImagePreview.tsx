@@ -89,7 +89,7 @@ export default function ImagePreview({
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+      className="fixed inset-0 z-51 flex items-center justify-center bg-black/90"
       onClick={(e) => {
         if (e.target === containerRef.current) {
           onClose();
