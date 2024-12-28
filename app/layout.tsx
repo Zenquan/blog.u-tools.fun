@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   },
   other: {
     'baidu-site-verification': '',
+    'og:title': 'Zenquan',
+    'og:description': 'Zenquan 的个人站点，关于前端、JavaScript 等',
+    'og:image': '/icons/favicon.png',
+    'og:url': 'https://blog.u-tools.fun',
   },
 };
 

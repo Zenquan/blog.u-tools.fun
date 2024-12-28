@@ -10,6 +10,12 @@ export const generateMetadata = async (props) => {
   return {
     title: `${weekly.title} - Zenquan's Weekly`,
     description: weekly.description,
+    other: {
+      'og:title': weekly.title,
+      'og:description': weekly.description,
+      'og:image': weekly.socialImage ?? '/icons/favicon.png',
+      'og:url': `https://blog.u-tools.fun/weekly/${weekly.slug}`,
+    },
   };
 };
 

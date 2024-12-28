@@ -2,6 +2,7 @@
 title: 第1期：开源与AI工具的碰撞
 date: 2024-12-28
 description: 本期周刊关注开源 3D 建模软件、AI 驱动的前端开发工具，以及技术领域的最新动态。
+socialImage: /static/weekly/issue-1-cover.png
 ---
 
 ![封面](/static/weekly/issue-1-cover.png)

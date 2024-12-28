@@ -13,6 +13,12 @@ export const generateMetadata = async props => {
     title: `${blog.title} - Zenquan's Blog`,
     description: blog.description,
     keywords: blog.tags.join(', '),
+    other: {
+      'og:title': blog.title,
+      'og:description': blog.description,
+      'og:image': blog.socialImage ?? '/icons/favicon.png',
+      'og:url': `https://blog.u-tools.fun/blog/${blog.slug}`,
+    },
   };
 };
 
