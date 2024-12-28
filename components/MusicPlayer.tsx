@@ -150,7 +150,7 @@ const MusicPlayer: FC<MusicPlayerProps> = ({ url }) => {
           </div>
 
           {/* 信息 */}
-          <div className="flex-1 min-w-0 py-4 pr-6">
+          <div className="flex-1 min-w-0 pr-6">
             <div className="text-base font-medium text-gray-900 truncate">
               {title}
             </div>
