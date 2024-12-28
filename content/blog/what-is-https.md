@@ -278,7 +278,7 @@ brotli_types text/plain text/css application/javascript application/json image/s
 ## 实际案例分析
 
 ### 案例一：银行转账
-1. **场景**���用户在手机银行 App 进行转账
+1. **场景**：用户在手机银行 App 进行转账
 2. **安全措施**：
    - 证书固定（Certificate Pinning）
    - 双向认证（mTLS）
