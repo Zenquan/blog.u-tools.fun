@@ -59,7 +59,7 @@ export default async function Page() {
             <ArrowUpRightIcon size={20} />
           </Link>
         </div>
-        <List data={blogList} className="mt-4" />
+        <List data={blogList} className="my-4" />
       </div>
     </>
   );
