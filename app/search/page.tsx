@@ -7,6 +7,12 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '搜索 - Zenquan\'s Blog',
   description: '搜索文章内容',
+  other: {
+    'og:title': '搜索 - Zenquan\'s Blog',
+    'og:description': '搜索文章内容',
+    'og:image': '/icons/favicon.png',
+    'og:url': `https://blog.u-tools.fun/search`,
+  },
 };
 
 export default function Page() {

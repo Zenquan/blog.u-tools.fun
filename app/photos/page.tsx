@@ -5,6 +5,12 @@ import CollectionList from '@/components/CollectionList';
 export const metadata: Metadata = {
   title: '摄影集 - Zenquan\'s Blog',
   description: '记录生活中的美好瞬间',
+  other: {
+    'og:title': '摄影集 - Zenquan\'s Blog',
+    'og:description': '记录生活中的美好瞬间',
+    'og:image': '/icons/favicon.png',
+    'og:url': `https://blog.u-tools.fun/photos`,
+  },
 };
 
 export default function Page() {

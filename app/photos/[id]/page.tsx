@@ -16,11 +16,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: `${collection?.title || '摄影集'} - Zenquan's Blog`,
       description: collection?.description || '摄影集详情',
+      other: {
+        'og:title': `${collection?.title || '摄影集'} - Zenquan's Blog`,
+        'og:description': collection?.description || '摄影集详情',
+        'og:image': '/icons/favicon.png',
+        'og:url': `https://blog.u-tools.fun/photos/${id}`,
+      },
     };
   } catch (error) {
     return {
       title: '摄影集 - Zenquan\'s Blog',
       description: '摄影集详情',
+      other: {
+        'og:title': '摄影集 - Zenquan\'s Blog',
+        'og:description': '摄影集详情',
+        'og:image': '/icons/favicon.png',
+        'og:url': `https://blog.u-tools.fun/photos/${id}`,
+      },
     };
   }
 }

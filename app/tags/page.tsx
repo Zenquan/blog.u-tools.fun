@@ -6,6 +6,12 @@ import { titleFont } from '@/lib/utils/fonts';
 export const metadata: Metadata = {
   title: '标签 - Zenquan\'s Blog',
   description: '博客文章标签列表',
+  other: {
+    'og:title': '标签 - Zenquan\'s Blog',
+    'og:description': '博客文章标签列表',
+    'og:image': '/icons/favicon.png',
+    'og:url': `https://blog.u-tools.fun/tags`,
+  },
 };
 
 export default async function Page() {

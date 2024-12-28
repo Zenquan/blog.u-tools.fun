@@ -6,6 +6,12 @@ import { titleFont } from '@/lib/utils/fonts';
 export const metadata: Metadata = {
   title: '博客 - Zenquan\'s Blog',
   description: '分享前端、JavaScript 等技术文章',
+  other: {
+    'og:title': '博客 - Zenquan\'s Blog',
+    'og:description': '分享前端、JavaScript 等技术文章',
+    'og:image': '/icons/favicon.png',
+    'og:url': `https://blog.u-tools.fun/blog`,
+  },
 };
 
 export default function Page() {

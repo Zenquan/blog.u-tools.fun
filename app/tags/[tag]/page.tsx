@@ -10,6 +10,12 @@ export async function generateMetadata(props): Promise<Metadata> {
   return {
     title: `${params.tag} - Zenquan's Blog`,
     description: `标签 ${params.tag} 下的所有文章`,
+    other: {
+      'og:title': `${params.tag} - Zenquan's Blog`,
+      'og:description': `标签 ${params.tag} 下的所有文章`,
+      'og:image': '/icons/favicon.png',
+      'og:url': `https://blog.u-tools.fun/tags/${params.tag}`,
+    },
   };
 }
 
