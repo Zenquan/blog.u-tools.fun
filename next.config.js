@@ -26,6 +26,20 @@ const nextConfig = {
     ];
   },
   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 's2.loli.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.loli.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'tva1.sinaimg.cn',
+      },
+    ],
     formats: ['image/avif', 'image/webp'],
     domains: [
       'p3-luna.douyinpic.com',
@@ -34,9 +48,9 @@ const nextConfig = {
       'y.gtimg.cn',
       'images.unsplash.com',
       'plus.unsplash.com',
+      's2.loli.net'
     ],
   },
-  swcMinify: false,
   compiler: {
     removeConsole: false,
   },

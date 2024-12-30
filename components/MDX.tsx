@@ -134,7 +134,13 @@ const MDX: FC<MDXProps> = ({ code, date, update_at }) => {
           components={{
             img: ({ alt, ...props }: any) => (
               <span className="block my-4">
-                <Image alt={alt || ''} {...props} />
+                <Image 
+                  alt={alt || ''} 
+                  width={720} 
+                  height={480} 
+                  className="w-full h-auto"
+                  {...props} 
+                />
               </span>
             ),
             h1: (props: any) => (
