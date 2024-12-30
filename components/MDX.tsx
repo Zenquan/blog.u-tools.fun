@@ -11,9 +11,13 @@ import ArticleFooter from './ArticleFooter';
 const slugifyWithCounter = () => {
   const slugs = new Map<string, number>();
 
-  return (str: string) => {
-    const base = str
-      ?.toLowerCase()
+  return (str: any) => {
+    // 确保输入是字符串
+    const text = String(str);
+    if (!text) return '';
+
+    const base = text
+      .toLowerCase()
       .trim()
       .replace(/\s+/g, '-')
       .replace(/[^\w\-]+/g, '')
