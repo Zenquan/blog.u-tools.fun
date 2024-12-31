@@ -15,14 +15,11 @@ export const metadata: Metadata = {
   },
 };
 
-interface PageProps {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
-export default function Page({
+export default async function Page({
   searchParams,
-}: PageProps) {
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   const pageSize = 10; // 每页显示的数量
   const currentPage = Number(searchParams.page) || 1; // 当前页码
   

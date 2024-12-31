@@ -15,7 +15,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   return (
     <div className="pt-10 pb-6 px-3">
       <h1
