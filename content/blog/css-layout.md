@@ -96,7 +96,7 @@ graph TD
 
 ### 4. 效果展示
 
-![圣杯布局效果图](https://user-images.githubusercontent.com/29729724/35984504-8baba868-0d2f-11e8-9594-cbd7ff565bf4.PNG)
+![圣杯布局效果图](/static/blog/css-layout/35984504-8baba868-0d2f-11e8-9594-cbd7ff565bf4.png)
 
 ## 双飞翼布局实现
 
@@ -157,7 +157,7 @@ graph TD
 
 ### 4. 效果展示
 
-![双飞翼布局效果图](https://user-images.githubusercontent.com/29729724/35984524-92ec9678-0d2f-11e8-91c7-6f72fc2642a8.PNG)
+![双飞翼布局效果图](/static/blog/css-layout/35984524-92ec9678-0d2f-11e8-91c7-6f72fc2642a8.png)
 
 ## 两种布局方案对比
 
