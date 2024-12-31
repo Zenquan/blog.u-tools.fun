@@ -34,10 +34,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN" className={inter.variable}>
-      <body>
+      <body className="flex flex-col min-h-screen">
         <ErrorBoundary>
           <Menu />
-          <div className="max-w-3xl mx-auto px-2">{children}</div>
+          <main className="flex-1 max-w-3xl mx-auto px-2 w-full">
+            {children}
+          </main>
           <Footer/>
         </ErrorBoundary>
         <Script
