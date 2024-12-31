@@ -2,8 +2,7 @@
 title: 深入理解 JavaScript 中的 Promise
 date: 2019-01-31
 update_at: 2024-12-28
-description: 在JavaScript中，异步操作非常多见，然而在Promise之前，我们是在类似以下的做法中处理多重异步回调，每
-一层里都要调另一个异步函数，形成了所谓的“回调地狱”， Promis是为了解决回调地狱的方案,是一种链式操作。
+description: 在JavaScript中，异步操作非常多见，然而在Promise之前，我们是在类似以下的做法中处理多重异步回调，每一层里都要调另一个异步函数，形成了所谓的“回调地狱”， Promis是为了解决回调地狱的方案,是一种链式操作。
 tags:
   - javascript
   - promise
