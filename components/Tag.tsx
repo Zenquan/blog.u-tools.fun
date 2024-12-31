@@ -9,7 +9,6 @@ interface TagProps {
 }
 
 const Tag: FC<TagProps> = ({ children, className = '' }) => {
-  console.log("🚀 ~ children:", children)
   const tag = Array.isArray(children) ? children[0]?.toString() : children?.toString() || '';
   return (
     <Link

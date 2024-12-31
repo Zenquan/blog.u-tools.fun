@@ -131,7 +131,6 @@ export async function GET(request: Request) {
   }
 
   const input = decodeURIComponent(url)
-  console.log("🚀 ~ GET ~ input:", input)
 
   try {
     const result = await extractMusicInfo(input);

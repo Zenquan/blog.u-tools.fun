@@ -36,8 +36,6 @@ export default async function Page(props) {
   const tag = decodeURIComponent(params.tag);
   const blogs = allBlogs
     .filter((blog) => {
-      console.log('blog.tags', blog.tags);
-      console.log('tag', tag);
       return blog.tags?.includes(tag);
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
