@@ -1,6 +1,5 @@
 ---
-title: 深入理解 JavaScript 中的 
-Promise
+title: 深入理解 JavaScript 中的 Promise
 date: 2019-01-31
 update_at: 2024-12-28
 description: 在JavaScript中，异步操
