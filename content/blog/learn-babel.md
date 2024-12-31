@@ -306,3 +306,5 @@ let importPlugin = {
 原文：[从AST编译解析谈到写babel插件](https://github.com/Zenquan/blog/issues/13)，欢迎 star，欢迎交流。
 
 项目地址：[babelPlugin](https://github.com/Zenquan/babelPlugin)
+
+<ArticleFooter />

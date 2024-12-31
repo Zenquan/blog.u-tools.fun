@@ -450,3 +450,5 @@ if (!Date.now)
 - [Animate.css](https://animate.style/)
 - [MDN - requestAnimationFrame](https://developer.mozilla.org/zh-CN/docs/Web/API/window/requestAnimationFrame)
 - [CSS Triggers](https://csstriggers.com/)
+
+<ArticleFooter />

@@ -225,3 +225,5 @@ html {
 - [Can I Use - transform](https://caniuse.com/?search=transform)
 - [CSS Tricks - A Complete Guide to CSS Media Queries](https://css-tricks.com/a-complete-guide-to-css-media-queries/)
 - [W3C - Media Queries](https://www.w3.org/TR/css3-mediaqueries/)
+
+<ArticleFooter />
