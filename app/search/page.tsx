@@ -15,14 +15,7 @@ export const metadata: Metadata = {
   },
 };
 
-type SearchParams = { [key: string]: string | string[] | undefined };
-
-interface PageProps {
-  params: { slug?: string };
-  searchParams: SearchParams;
-}
-
-export default async function Page({ searchParams }: PageProps) {
+export default async function Page() {
   return (
     <div className="pt-10 pb-6 px-3">
       <h1
