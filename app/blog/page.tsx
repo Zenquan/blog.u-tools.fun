@@ -15,6 +15,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  const sortedBlogs = allBlogs.sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
   return (
     <>
       <div className="pt-10 pb-6 px-3">
@@ -24,10 +28,10 @@ export default function Page() {
           博客
         </h1>
         <p className="mt-4 text-gray-600 text-sm">
-          共 {allBlogs.length} 篇文章
+          共 {sortedBlogs.length} 篇文章
         </p>
       </div>
-      <List data={allBlogs} />
+      <List data={sortedBlogs} />
     </>
   );
 }
