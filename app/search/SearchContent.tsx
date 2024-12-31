@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import Search from '@/components/Search';
 import Tag from '@/components/Tag';
 import List from '@/components/List';
+import Pagination from '@/components/Pagination';
 
 interface Post {
   title: string;
@@ -27,6 +28,8 @@ export default function SearchContent({ allBlogs, allWeeklies }: SearchContentPr
   const searchParams = useSearchParams();
   const keyword = searchParams.get('q') || '';
   const tag = searchParams.get('tag') || '';
+  const page = Number(searchParams.get('page')) || 1;
+  const pageSize = 10;
 
   // 合并博客和周刊数据
   const allPosts: Post[] = [
@@ -87,6 +90,17 @@ export default function SearchContent({ allBlogs, allWeeklies }: SearchContentPr
     return titleMatch || descriptionMatch || typeMatch || tagsMatch || contentMatch;
   });
 
+  // 分页处理
+  const totalPages = Math.ceil(searchResults.length / pageSize);
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  const currentResults = searchResults.slice(start, end);
+
+  // 构建分页的查询参数
+  const paginationQueryParams: Record<string, string> = {};
+  if (keyword) paginationQueryParams.q = keyword;
+  if (tag) paginationQueryParams.tag = tag;
+
   return (
     <>
       <div className="mt-6">
@@ -120,12 +134,18 @@ export default function SearchContent({ allBlogs, allWeeklies }: SearchContentPr
       </div>
       <div className="mt-6">
         <List
-          data={searchResults.map(post => ({
+          data={currentResults.map(post => ({
             ...post,
             title: `${post.title} · ${post.type}`,
           }))}
         />
       </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        basePath="/search"
+        queryParams={paginationQueryParams}
+      />
     </>
   );
 }
