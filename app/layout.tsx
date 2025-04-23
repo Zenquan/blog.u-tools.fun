@@ -35,11 +35,20 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN" className={inter.variable}>
-      <head>
-        <script defer src="https://umami-oisycgji.sealoshzh.site/script.js" data-website-id="aa83ea26-3018-41e2-a8f6-dd1afd38cf10"></script>
-        <script async defer src="https://tianji-eaooxdeh.sealoshzh.site/tracker.js" data-website-id="cm9tb9z3r000pt5u3eg4x6sil"></script>
-      </head>
       <body className="flex flex-col min-h-screen">
+        <Script 
+          src="https://umami-oisycgji.sealoshzh.site/script.js" 
+          data-website-id="630f0dce-0e09-4ef9-9cb1-96f6896ee42d"
+          strategy="beforeInteractive"
+          defer
+        />
+        <Script 
+          src="https://tianji-eaooxdeh.sealoshzh.site/tracker.js" 
+          data-website-id="cm9tb9z3r000pt5u3eg4x6sil"
+          strategy="beforeInteractive"
+          async
+          defer
+        />
         <ErrorBoundary>
           <Menu />
           <main className="flex-1 max-w-3xl mx-auto px-2 w-full">
