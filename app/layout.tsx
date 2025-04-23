@@ -35,6 +35,20 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN" className={inter.variable}>
+      <head>
+        <Script 
+          src="https://umami-oisycgji.sealoshzh.site/script.js" 
+          data-website-id="630f0dce-0e09-4ef9-9cb1-96f6896ee42d"
+          strategy="afterInteractive"
+          defer
+        />
+        <Script 
+          async 
+          defer 
+          src="https://tianji-eaooxdeh.sealoshzh.site/tracker.js" 
+          data-website-id="cm9tb9z3r000pt5u3eg4x6sil"
+        />
+      </head>
       <body className="flex flex-col min-h-screen">
         <ErrorBoundary>
           <Menu />
@@ -58,18 +72,6 @@ export default function RootLayout({ children }) {
           }}
         />
         <Script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js" strategy="beforeInteractive" />
-        <Script 
-          src="https://umami-oisycgji.sealoshzh.site/script.js" 
-          data-website-id="630f0dce-0e09-4ef9-9cb1-96f6896ee42d"
-          strategy="afterInteractive"
-          defer
-        />
-        <Script 
-          async 
-          defer 
-          src="https://tianji-eaooxdeh.sealoshzh.site/tracker.js" 
-          data-website-id="cm9tb9z3r000pt5u3eg4x6sil"
-        />
         <Analytics />
       </body>
     </html>
