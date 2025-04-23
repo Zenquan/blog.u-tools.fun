@@ -5,6 +5,7 @@ import Menu from '../components/Menu';
 import './globals.css';
 import Footer from '../components/Footer';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -63,6 +64,13 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
           defer
         />
+        <Script 
+          async 
+          defer 
+          src="https://tianji-eaooxdeh.sealoshzh.site/tracker.js" 
+          data-website-id="cm9tb9z3r000pt5u3eg4x6sil"
+        />
+        <Analytics />
       </body>
     </html>
   );
