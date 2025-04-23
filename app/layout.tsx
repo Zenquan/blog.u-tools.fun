@@ -37,12 +37,6 @@ export default function RootLayout({ children }) {
     <html lang="zh-CN" className={inter.variable}>
       <body className="flex flex-col min-h-screen">
         <Script 
-          src="https://umami-oisycgji.sealoshzh.site/script.js" 
-          data-website-id="630f0dce-0e09-4ef9-9cb1-96f6896ee42d"
-          strategy="beforeInteractive"
-          defer
-        />
-        <Script 
           src="https://tianji-eaooxdeh.sealoshzh.site/tracker.js" 
           data-website-id="cm9tb9z3r000pt5u3eg4x6sil"
           strategy="beforeInteractive"

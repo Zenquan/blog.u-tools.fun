@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     response.headers.set('X-XSS-Protection', '1; mode=block');
     response.headers.set(
       'Content-Security-Policy',
-      "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.u-tools.fun *.douyin.com *.douyinpic.com *.gtimg.cn *.unsplash.com *.splitbee.io unpkg.com; img-src 'self' data: blob: *.u-tools.fun *.douyin.com *.douyinpic.com *.gtimg.cn *.unsplash.com; media-src 'self' *.u-tools.fun *.douyin.com *.douyinpic.com *.gtimg.cn;"
+      "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.u-tools.fun *.douyin.com *.douyinpic.com *.gtimg.cn *.unsplash.com *.splitbee.io unpkg.com *.sealoshzh.site tianji-eaooxdeh.sealoshzh.site umami-oisycgji.sealoshzh.site; img-src 'self' data: blob: *.u-tools.fun *.douyin.com *.douyinpic.com *.gtimg.cn *.unsplash.com; media-src 'self' *.u-tools.fun *.douyin.com *.douyinpic.com *.gtimg.cn;"
     );
 
     return response;
