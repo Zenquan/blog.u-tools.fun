@@ -43,6 +43,12 @@ export default function RootLayout({ children }) {
           async
           defer
         />
+        <Script 
+          src="https://umami-nnlkzhqb.sealoshzh.site/script.js" 
+          data-website-id="c82522ef-439a-437a-9b0f-19b992049407"
+          strategy="beforeInteractive"
+          defer
+        />
         <ErrorBoundary>
           <Menu />
           <main className="flex-1 max-w-3xl mx-auto px-2 w-full">
