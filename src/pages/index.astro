@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Social from '../components/Social.astro';
 import List from '../components/List.astro';
 import { extraList } from '../utils/content';
 import ArrowUpRightIcon from '../assets/arrow-up-right.svg';
@@ -27,7 +26,6 @@ const blogList = extraList(await getCollection('post', ({ id }) => id.startsWith
         <a href="https://kee.so" target="_blank" rel="noreferrer" class="hover:underline">kee.so</a>
       </p>
     </div>
-    <Social />
   </div>
 
   <div class="mt-8">
