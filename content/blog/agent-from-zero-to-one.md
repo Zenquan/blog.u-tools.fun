@@ -241,7 +241,7 @@ P2:            信任内容矩阵 + 损耗归因周报
 | LangGraph 1.x checkpoint 要求 config 里必须有 **`thread_id`**（只传业务 id 会 `KeyError: 'thread_id'`） | 新框架 API 差异大，先跑最小骨架验证，别按旧知识写 |
 | pip 在沙箱里被 safe-delete 拦截（清缓存触发批量删除确认） | 受限环境用 `--no-cache-dir` 规避 |
 | `pytest | tail` 前台看似卡死，实为管道缓冲 | 长命令输出重定向到文件再读，用 pgrep 查进程 |
-| MySQL 版本红线：checkpoint 要求 **≥8.0.19 且 <9.6**；`mysql:latest` 已滚到 26.x、5.7 建表 1064 | 社区包有隐式版本边界，选型必查；显式锁 `mysql:8.4` LTS |
+| MySQL 版本红线：checkpoint 要求 **`≥8.0.19 且 <9.6`**；`mysql:latest` 已滚到 26.x、5.7 建表 1064 | 社区包有隐式版本边界，选型必查；显式锁 `mysql:8.4` LTS |
 | pymysql 非线程安全：checkpoint（LangGraph 线程池）与事件日志/业务表（主线程）**必须各持独立连接**，复用会 `read of closed file` | 多线程架构下连接隔离是硬规则 |
 | LangGraph 挂起返回值含 Interrupt 对象（不可 JSON 序列化），保存快照前必须剔除 `__interrupt__` | 序列化边界要显式处理 |
 | 新建 `app/api/*.py` 忘记 `app.include_router(router)` → 路由静默缺失（404 无报错） | 自检 `[r.path for r in app.routes]` |
