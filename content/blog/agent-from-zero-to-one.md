@@ -410,6 +410,75 @@ P2:            信任内容矩阵 + 损耗归因周报
 
 这个项目里 AGENTS.md 不止是给 AI 看的说明书，它是一份**可执行的工程宪法**：技术栈锚定（防止 AI 用过时知识写代码）、硬性纪律（TDD/HITL/日志）、环境注意事项（每次踩坑都回填）、版本路线图（进度对齐）。配合 `.agent/skills/` 的技能闭环（research → architecture-design → python-backend/nextjs-frontend → code-review → project-workflow → self-improving-agent），AI 的每次产出都有流程约束和验收标准。
 
+
+### 4.5 本项目用到的 Skill 全景与串联
+
+> 技能不是"一堆模板"，而是一条**接力流水线**：每个 skill 有明确的触发时机、输入契约和输出产物，**上一个 skill 的产物就是下一个 skill 的输入**。分两层：**项目级技能**（`.agent/skills/`，随仓库版本化、按本项目定制）与**运行时内置技能**（Reasonix 平台自带、不落仓库、任何项目通用）。
+
+#### 4.5.1 项目级技能清单（12 个）
+
+| Skill | 定位 | 触发时机 | 输出产物 |
+|-------|------|---------|---------|
+| `grill-me` | 需求追问（GRILL 五问：Goal/Range/Inputs/Logic/Legacy） | **任何新需求/变更之前，强制** | 「需求共识」段落，用户确认后才可继续 |
+| `research` | 引导式调研（澄清→拆解→两段式搜索→交叉验证→结论先行报告） | 技术调研/选型/生态查证/新领域扫盲 | 调研报告（标来源、≥3 来源交叉） |
+| `architecture-design` | 架构设计流程（澄清→调研→决策→ADR→编排图/状态 schema/数据表→风险与路线图） | 新系统/新项目/大功能从 0 到 1 | ADR + 编排图 + 状态 schema + 目录结构 + 路线图 |
+| `python-backend` | 后端 TDD（FastAPI + LangGraph + 工具 Seam 三层 + 事件日志） | 写/改后端时 | pytest 全绿的代码 + 契约同步（api-contract） |
+| `ui-new` | UI 设计先行（页面结构/组件划分/设计 Token/交互稿） | 需求明确后、前端代码前，**先出方案让用户确认** | 页面级 UI 设计方案 |
+| `nextjs-frontend` | 前端实现（App Router + TS + Tailwind/Design Token + lib/api.ts） | 按已确认的 UI 方案写代码时 | 通过 `pnpm lint && type-check && build` 的界面 |
+| `code-review` | 风险优先审查（`文件:行号` + 影响 + 置信度，Critical/Major 阻断） | 代码完成、合并前 | 分级 findings，阻断项修复后重审 |
+| `project-workflow` | **流程编排器**：把 Phase 0~6 串成流水线，按阶段加载子 skill | 开始新版本/新需求/里程碑收尾 | 各阶段验收标准与验证命令 |
+| `project-docs` | 文档三件套（迭代记录/版本计划/issues-log） | 任何文档变更或版本收尾 | 三件套文件齐全 |
+| `impeccable` | 高品质前端视觉（排版/色彩/动效/响应式/设计系统） | 需要非泛化审美的高质量界面时 | 设计指导与代码模式 |
+| `rn-project` | React Native 移动端（脚手架/打包/模拟器预览/RN 0.87 硬坑） | 移动端任务时 | 可运行打包的 RN 工程 |
+| `self-improving-agent` | 经验沉淀（LRN/ERR → 可复用资产） | 里程碑收尾、踩坑后 | `.learnings/` 条目 + AGENTS.md 环境坑回填 |
+
+#### 4.5.2 运行时内置技能（Reasonix 自带，迭代中高频使用）
+
+| Skill | 定位 | 用在哪儿 |
+|-------|------|---------|
+| `explore` / `read_only_task` | 只读子代理探查代码库，只回传蒸馏结论 | 进入不熟悉的代码区前先探查，避免主上下文被大段读取污染 |
+| `review` / `security_review` | 对当前分支 diff 做风险/安全审查（文件:行号） | PR/合并前，与项目级 `code-review` 互补：一个 diff 级通用审查，一个项目定制纪律审查 |
+| `init` | 初始化/刷新项目 AGENTS.md | 项目起步、目录结构变化后 |
+| `install-capability` | 安装 MCP server / 技能（URL/本地路径/.mcp.json） | 需要新工具链/新技能时 |
+| `docs` / `reasonix-guide` | 查 Reasonix 平台自身文档与配置排查 | 平台级问题（技能优先级、配置、MCP 故障） |
+
+#### 4.5.3 它们如何串联：一条里程碑的接力
+
+```
+新需求进来
+   │
+   ▼
+grill-me ──→ 「需求共识」（等用户确认）
+   │
+   ▼
+project-workflow（总编排，Phase 0→6，每阶段加载对应子 skill）
+   │
+   ├─ Phase 0 规划：版本计划条目（验收标准含：范围纪律 + 规则显性化）
+   ├─ Phase 1 分支：feature_vX.Y_name + 按改动面加载子 skill
+   ├─ Phase 2 后端：python-backend（RED→GREEN，test 提交在前）
+   │        └─ 产物：pytest 全绿 + api-contract 同步
+   ├─ Phase 3a UI：ui-new 出方案 → 用户确认
+   ├─ Phase 3 前端：nextjs-frontend 按方案实现
+   │        └─ 产物：lint + type-check + build 通过，规则可见性检查
+   ├─ Phase 4 审查：code-review（+ 运行时 review/security_review）
+   │        └─ 阻断项修复 → 重审通过
+   ├─ Phase 5 文档：project-docs 三件套
+   └─ Phase 6 沉淀：self-improving-agent（LRN/ERR）→ AGENTS.md 回填
+```
+
+**接力点（上一个的输出 = 下一个的输入）**：
+
+| 交接 | 输入 → 输出 |
+|------|-----------|
+| grill-me → project-workflow | 需求共识 → 版本计划条目（验收标准） |
+| python-backend → ui-new / nextjs-frontend | api-contract 契约 → 前端类型与请求对齐 |
+| ui-new → nextjs-frontend | UI 设计方案（用户确认）→ 界面实现 |
+| 全部代码 → code-review | 完整 diff → 分级 findings → 修复 → 重审通过 |
+| code-review → project-docs | 审查结论 → 三件套记录关键决策与问题 |
+| project-docs → self-improving-agent | 问题清单/踩坑 → LRN/ERR 沉淀 → AGENTS.md 环境坑 |
+
+**两条铁律如何横切所有阶段**：范围纪律（只做用户明确要求的）在 grill-me 追问时锁定边界、Phase 0 写进验收标准；规则显性化（业务规则必须在 UI 可见）在 Phase 0 验收标准强制写一条"该规则在界面哪里可见"，Phase 3 前端逐条检查，Phase 4 code-review 复核——它们不是某个 skill 的附注，而是贯穿整条流水线的验收条件。
+
 ---
 
 ## 五、总结：从 0 到 1 的可复用方法论
@@ -452,7 +521,7 @@ P2:            信任内容矩阵 + 损耗归因周报
 | 架构复盘 | `docs/architecture-writing-guide.md` | 从调研到架构的方法论 |
 | 自查报告 | `docs/project-self-check.md` | 前期工作完整性审计 |
 | 项目总纲 | `AGENTS.md` | 技术栈/纪律/环境坑/路线图 |
-| 技能闭环 | `.agent/skills/` | research/architecture-design/python-backend/nextjs-frontend/code-review/project-workflow/project-docs/self-improving-agent |
+| 技能闭环 | `.agent/skills/` | grill-me / research / architecture-design / python-backend / ui-new / nextjs-frontend / code-review / project-workflow / project-docs / impeccable / rn-project / self-improving-agent（共 12 个，详见 §4.5） |
 | 经验库 | `.learnings/`（LRN/ERR） | 学习与错误沉淀 |
 
 ---
