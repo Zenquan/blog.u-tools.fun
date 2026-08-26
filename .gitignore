@@ -43,3 +43,5 @@ yarn-error.log*
 content/.*
 
 *.html
+
+.pnpm-store/
