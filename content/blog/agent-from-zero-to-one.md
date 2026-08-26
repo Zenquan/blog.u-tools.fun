@@ -2,7 +2,7 @@
 title: 从 0 到 1 构建一个多 Agent 平台：架构、产品、应用与 AI 编程落地的完整复盘
 date: 2026-08-16
 update_at: 2026-08-19
-description: 本文深入探讨了 Hybrid App 中 H5 离线化的两种实现方案，包括离线包 + LocalServer 和 WebView 预加载 + 缓存资源方案的详细对比与实践经验。
+description: 从 0 到 1 构建「Content Pipeline Platform」多 Agent 内容生产平台的完整复盘：按架构层（单一 vs 多 Agent、LangGraph 选型）→ 产品层 → 应用层（M0/M1/M2 落地、M3 演进与生鲜行业推演）→ AI 编程落地四层拆解，完整存档决策链路、踩坑记录与可复用的方法论。
 tags:
   - AI Agent
   - 多 Agent
@@ -10,9 +10,12 @@ tags:
   - AI 编程
 ---
 
+# 从 0 到 1 构建一个多 Agent 平台：架构、产品、应用与 AI 编程落地的完整复盘
+
 > 项目：Content Pipeline Platform（多 Agent 内容生产平台）
 > 复盘范围：2026-08-16 起，从"想做 Agent"到 M0/M1/M2 落地、M3 演进，及生鲜行业应用推演
 > 写作目的：把"从 0 到 1 的思考链"完整存档——决策怎么做的、坑怎么踩的、方法论是什么，供学习与复用
+
 ---
 
 ## 0. 序：这一切是怎么开始的
@@ -119,6 +122,149 @@ dsh 的教训同样重要：**v0.1 开发者预览版、破坏性变更频繁，
 
 ---
 
+
+---
+
+## 场景架构示意图
+
+> 对应：`server/app/pipeline/types.py` · `server/app/persistence/scenario_seed.py` · `server/app/pipeline/scenarios.py`
+> 本节说明 29 个场景如何挂载到固定图结构上，是 §三 应用层的先决知识。
+
+### 1. 系统调用链
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          用户提交任务（C 端）                              │
+│                         POST /tasks { target }                           │
+└───────────────────────────────┬─────────────────────────────────────────┘
+                                │
+┌───────────────────────────────▼─────────────────────────────────────────┐
+│                        ScenarioRegistry（运行时注册表）                     │
+│                                                                         │
+│   ┌──────────────────────────────────────────────────────────────┐      │
+│   │  代码默认 (TASK_TYPES, 3 条)          DB 覆盖 + 自定义 (26 条)  │      │
+│   │  ┌──────────────────────────────────────────────────────┐     │      │
+│   │  │ content       → targets: {wechat_article, video_...}  │     │      │
+│   │  │ direct_answer → targets: {direct_answer}              │     │      │
+│   │  │ video_short   → targets: {video_short}                │     │      │
+│   │  └──────────────────────────────────────────────────────┘     │      │
+│   │                          ▼                                      │      │
+│   │  ┌──────────────────────────────────────────────────────┐     │      │
+│   │  │ 生鲜行业场景 (26 条，seed 写入 scenarios 表)           │     │      │
+│   │  │ live_script │ batch_video │ new_store_launch │ ...   │     │      │
+│   │  └──────────────────────────────────────────────────────┘     │      │
+│   └──────────────────────────────────┬────────────────────────────┘      │
+│                                      │ resolve_target(target)             │
+└──────────────────────────────────────┼───────────────────────────────────┘
+                                       │
+                    ┌──────────────────▼──────────────────┐
+                    │         supervisor 节点              │
+                    │   target → TaskType → pipeline       │
+                    └──────────────────┬──────────────────┘
+                                       │
+                    ┌──────────────────▼──────────────────┐
+                    │      LangGraph 图（固定 8 节点）       │
+                    │                                      │
+                    │  research → write → video_gen → ...  │
+                    │                          ▲            │
+                    │                          └ 条件边      │
+                    └──────────────────────────────────────┘
+```
+
+**关键设计**：图结构（8 个节点 + 条件边）**零改动**，新场景只需在注册表加一条 `TaskType`。
+
+### 2. Target → Scenario → Agent 分层模型
+
+```
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  Target（入口）          用户选择 "公众号文章" / "晚市清货" 等       │
+  │  targets 表              23 个 target，每个有 name + label          │
+  └────────────────────┬────────────────────────────────────────────────┘
+                       │ 属于（多对多）
+  ┌────────────────────▼────────────────────────────────────────────────┐
+  │  Scenario / TaskType（类型）          29 个场景                     │
+  │  scenarios 表（DB 真相源）             每个场景声明：                  │
+  │                                        • targets（哪些入口可用）      │
+  │                                        • roles（角色序列）            │
+  │                                        • pipeline（节点序列）         │
+  └────────────────────┬────────────────────────────────────────────────┘
+                        │ 解析出
+  ┌────────────────────▼────────────────────────────────────────────────┐
+  │  Agent（角色）                         research / write / review /   │
+  │  agent_configs 表                     publish / cs_writer / ...     │
+  │  （prompt / model_tier / tools / skills）                            │
+  └─────────────────────────────────────────────────────────────────────┘
+```
+
+### 3. 图节点 × 场景复用矩阵
+
+所有场景共享同一张图（8 个节点），通过 `pipeline` 字段决定走哪些节点：
+
+```
+图节点（固定，不可新增）
+┌──────────────────────────────────────────────────────────────────────┐
+│   research    write    review    publish_confirm    review_escalate  │
+│      │         │         │              │                  │         │
+│   video_gen  publish                                          (interrupt)│
+│                                                                      │
+│   ● 机制节点（不走 agent，纯 interrupt 操作）：                       │
+│     publish_confirm   — 发布前人工确认                               │
+│     review_escalate   — 审核超限转人工                               │
+│   ● Agent 节点（需配置 agent 角色）：                                │
+│     research / write / review / publish / video_gen                  │
+└──────────────────────────────────────────────────────────────────────┘
+                              │
+         ┌────────────────────┼────────────────────┐
+         ▼                    ▼                    ▼
+  需研究素材的场景       需视频生成的场景      需升级审核的场景
+  content/new_store      batch_video          food_safety_response
+  competitor/knowledge                   trust_content / trust_matrix
+
+  ─────────────────────────────────────────────────────────────
+  其余 ~18 个场景走标准流水线：write → review → publish → publish_confirm
+  ─────────────────────────────────────────────────────────────
+```
+
+| 节点 | 出现场景数 | 说明 |
+|------|-----------|------|
+| `write` | 29 | 全部场景必过 |
+| `review` | ~20 | 需人工审核的场景 |
+| `publish` | ~20 | review 通过后进入 |
+| `publish_confirm` | ~20 | 发布前 HITL 确认 |
+| `research` | ~6 | 需外部素材支撑 |
+| `video_gen` | 1 | 仅 batch_video |
+| `review_escalate` | 3 | food_safety/trust_content/trust_matrix |
+
+### 4. 29 场景分类树
+
+```
+  29 场景
+    ├── Builtin（3）
+    │     ├── content        内容生产（公众号/视频脚本/社媒）
+    │     ├── direct_answer  直接问答
+    │     └── video_short    AI 短视频（write→video_gen→review→publish）
+    └── Custom（26，seed 写入 scenarios 表）
+          ├── A. 营销内容域（6）：live_script / batch_video / new_store_launch
+          │     / community_daily / multi_channel_listing / competitor_monitor
+          ├── B. 客服售后与信任域（5）：customer_service / food_safety_response ←review_esc
+          │     / knowledge_faq / trust_content ←review_esc / member_touch
+          ├── C. 私域与渠道域（4）：leader_pack / ugc_remake / member_daily / staff_training
+          ├── D. 日清模式专属域（7）：evening_clearance / fresh_daily / last_stock_push
+          │     / trust_matrix ←review_esc / supply_plan / weather_alert / bundle_meal
+          └── E. 内部治理域（5）：daily_report / loss_report / overnight_loss
+                / sell_by_prompt / store_clearance_script
+```
+
+### 5. Pipeline 形态分布
+
+```
+  形态 1（~18 个）：write → review → publish → publish_confirm
+  形态 2（~5 个）：research → write → review → publish → publish_confirm
+  形态 3（1 个）：write → video_gen → review → publish → publish_confirm  [batch_video]
+  形态 4（3 个）：write/research → review_escalate → review/publish → ...
+```
+
+---
 ## 三、应用层：从通用平台到生鲜行业
 
 ### 3.1 应用的本质是"能力 × 业务"的映射
@@ -241,7 +387,7 @@ P2:            信任内容矩阵 + 损耗归因周报
 | LangGraph 1.x checkpoint 要求 config 里必须有 **`thread_id`**（只传业务 id 会 `KeyError: 'thread_id'`） | 新框架 API 差异大，先跑最小骨架验证，别按旧知识写 |
 | pip 在沙箱里被 safe-delete 拦截（清缓存触发批量删除确认） | 受限环境用 `--no-cache-dir` 规避 |
 | `pytest | tail` 前台看似卡死，实为管道缓冲 | 长命令输出重定向到文件再读，用 pgrep 查进程 |
-| MySQL 版本红线：checkpoint 要求 **`≥8.0.19 且 <9.6`**；`mysql:latest` 已滚到 26.x、5.7 建表 1064 | 社区包有隐式版本边界，选型必查；显式锁 `mysql:8.4` LTS |
+| MySQL 版本红线：checkpoint 要求 **≥8.0.19 且 <9.6**；`mysql:latest` 已滚到 26.x、5.7 建表 1064 | 社区包有隐式版本边界，选型必查；显式锁 `mysql:8.4` LTS |
 | pymysql 非线程安全：checkpoint（LangGraph 线程池）与事件日志/业务表（主线程）**必须各持独立连接**，复用会 `read of closed file` | 多线程架构下连接隔离是硬规则 |
 | LangGraph 挂起返回值含 Interrupt 对象（不可 JSON 序列化），保存快照前必须剔除 `__interrupt__` | 序列化边界要显式处理 |
 | 新建 `app/api/*.py` 忘记 `app.include_router(router)` → 路由静默缺失（404 无报错） | 自检 `[r.path for r in app.routes]` |
@@ -312,3 +458,4 @@ P2:            信任内容矩阵 + 损耗归因周报
 ---
 
 > 最后一句：这个项目最值得记住的，不是用了 LangGraph，也不是做成了内容平台——而是**一套让"从 0 到 1 的思考"不丢失、可复用、能闭环的工程方法**。技术会过时，方法论不会。
+
