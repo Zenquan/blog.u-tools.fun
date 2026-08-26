@@ -311,7 +311,7 @@ content-pipeline-platform/
 | **事件日志** | append-only，模型可见必可重建 | 同库表 `event_log`（id 自增 + `(task_id, seq)` 唯一键） |
 | **业务表** | 任务快照（tasks） | 同库表 `tasks`（snapshot JSON，upsert） |
 
-> **版本红线**：≥8.0.19 且 <9.6（`mysql:latest` 已到 26.x、5.7 缺表达式默认值均不可用，**显式 `mysql:8.4` LTS**）。
+> **版本红线**：`≥8.0.19 且 <9.6`（`mysql:latest` 已到 26.x、5.7 缺表达式默认值均不可用，**显式 `mysql:8.4` LTS**）。
 > **连接配置**：`MYSQL_USERNAME/PASSWORD/ADDRESS/DATABASE` 四件套（DATABASE_URL 已移除）；`Unknown database(1049)` 自动 `CREATE DATABASE IF NOT EXISTS`（幂等）。
 > **连接隔离（重要）**：checkpoint 在 LangGraph 线程池写、事件日志/业务表在主线程写，pymysql 连接非线程安全——三者**各持独立连接**，禁止复用共享连接（会协议错乱 `read of closed file`）。
 
