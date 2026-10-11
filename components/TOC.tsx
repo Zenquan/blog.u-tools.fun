@@ -84,13 +84,16 @@ const TOC: FC<TOCProps> = ({ isMobile = false }) => {
     }
   };
 
+  // 以实际最小层级为缩进基准，避免去掉正文 H1 后目录整体右移
+  const minLevel = headings.length > 0 ? Math.min(...headings.map((h) => h.level)) : 1;
+
   const renderTOCContent = () => (
     <ul className="overflow-y-scroll flex-1 space-y-2 text-sm">
       {headings.map((heading) => (
         <li
           key={heading.id}
           style={{
-            paddingLeft: `${(heading.level - 1) * 1}rem`,
+            paddingLeft: `${(heading.level - minLevel) * 1}rem`,
           }}
           className="min-w-0"
         >

@@ -9,8 +9,6 @@ tags:
   - dsh
 ---
 
-# Agent 架构调研报告：单一 Agent vs 多 Agent
-
 > 场景：#scene#17 Agent 应用
 > 调研时间：2026-08-16
 > 参考：DeepSeek Harness (dsh) v0.1、Azure AI Agent Orchestration Patterns、业界多篇工程实践分析

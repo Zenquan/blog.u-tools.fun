@@ -9,8 +9,6 @@ tags:
   - LangGraph
 ---
 
-# 多 Agent 协作平台 · 技术选型对比报告
-
 > 场景：#scene#17 Agent 应用 — 多 Agent 协作平台
 > 调研时间：2026-08-16
 > 前置文档：`docs/agent-architecture-research.md`（单 vs 多 Agent 架构调研）

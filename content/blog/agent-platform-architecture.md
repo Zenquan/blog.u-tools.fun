@@ -9,8 +9,6 @@ tags:
   - LangGraph
 ---
 
-# 架构设计文档 - 多 Agent 内容生产平台
-
 > 项目：Content Pipeline Platform（内容生产流水线）
 > 场景：#scene#17 Agent 应用 · 多 Agent 协作平台
 > 版本：v0.1-draft

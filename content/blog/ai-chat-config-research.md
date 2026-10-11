@@ -9,8 +9,6 @@ tags:
   - LLM
 ---
 
-# AI 对话式配置调研 — 自然语言引导生成 Agent 平台配置
-
 > 日期：2026-08-18 · 触发：用户提出「像与 AI 对话一样配置平台」（非固定弹窗向导，而是自然语言来回、AI 主动引导追问）
 > 现状：已交付「弹窗式 4 步向导」（`docs/api-contract.md` §4.10，零 LLM 依赖）——保留为确定性兜底；本文调研**真正的 AI 对话式配置**是否值得做、怎么做。
 > 配套：`docs/agent-platform-architecture.md`（ADR）· `docs/api-contract.md` §4.10（已做弹窗版契约）· `docs/issues-log.md` [08-18]（模型配额教训）

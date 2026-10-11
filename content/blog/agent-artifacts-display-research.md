@@ -9,8 +9,6 @@ tags:
   - DeepResearch
 ---
 
-# 调研报告：Agent 阶段产物的展示方式（市面上怎么做）
-
 > 调研时间：2026-08-19 · 决策问题：**Agent 每个阶段产物（研究素材/大纲/草稿/审核结果/发布计划）在界面上怎么展示最好**——用于升级平台 C 端任务详情页与 B 端可观测
 > 范围：主流 Agent 产品（OpenAI DeepResearch/通用 Agent UI/LangGraph Studio）+ 内容生产工具链 · 深度：决策级→实现级
 
