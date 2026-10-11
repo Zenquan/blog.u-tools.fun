@@ -4,7 +4,8 @@ import { ArrowUpRightIcon } from 'lucide-react';
 import { compareDesc } from 'date-fns';
 import Social from '@/components/Social';
 import List from '@/components/List';
-import { allBlogs, allWeeklies } from 'contentlayer/generated';
+import { allBlogs } from 'contentlayer/generated';
+// import { allWeeklies } from 'contentlayer/generated'; // 周刊暂时隐藏
 
 const font = Anton({
   weight: '400',
@@ -12,9 +13,9 @@ const font = Anton({
 });
 
 export default async function Page() {
-  const weeklyList = allWeeklies
-    .sort((a, b) => (a.date > b.date ? -1 : 1))
-    .slice(0, 5);
+  // const weeklyList = allWeeklies
+  //   .sort((a, b) => (a.date > b.date ? -1 : 1))
+  //   .slice(0, 5);
 
   const blogList = allBlogs
     .sort((a, b) => (a.date > b.date ? -1 : 1))
@@ -35,6 +36,7 @@ export default async function Page() {
         </div>
         <Social />
       </div>
+      {/* 周刊暂时隐藏
       <div className="mt-8">
         <div className="flex items-center justify-between px-3">
           <h2 className="font-medium text-xl text-gray-800">周刊</h2>
@@ -48,6 +50,7 @@ export default async function Page() {
         </div>
         <List data={weeklyList} className="mt-4" />
       </div>
+      */}
       <div className="mt-8">
         <div className="flex items-center justify-between px-3">
           <h2 className="font-medium text-xl text-gray-800">博客</h2>

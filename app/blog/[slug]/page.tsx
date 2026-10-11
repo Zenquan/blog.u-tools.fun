@@ -32,23 +32,28 @@ export default async function Page(props) {
 
   return (
     <div className="relative">
-      <div className="flex flex-col items-center px-2 pt-12 pb-8">
-        <h1 className="font-medium text-2xl text-center">{blog.title}</h1>
-        <p className="mt-2 text-gray-500 text-sm font-mono">{blog.date}</p>
-        {blog.tags && blog.tags.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2 justify-center">
-            {blog.tags.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
+      {/* PC 端：突破 main 的 max-w-3xl，整体靠右贴边、正文固定 860px */}
+      <div className="lg:w-screen lg:mx-[calc(50%_-_50vw)]">
+        <div className="lg:ml-auto lg:w-[1152px] lg:max-w-[calc(100vw_-_2rem)]">
+          <div className="flex flex-col items-center px-2 pt-12 pb-8 lg:w-[860px]">
+            <h1 className="font-medium text-2xl text-center">{blog.title}</h1>
+            <p className="mt-2 text-gray-500 text-sm font-mono">{blog.date}</p>
+            {blog.tags && blog.tags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                {blog.tags.map((tag) => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="flex flex-col lg:flex-row justify-between gap-8">
-        <article className="w-full px-2 prose max-w-none lg:max-w-[720px]">
-          <MDX code={blog.body.code} date={blog.date} update_at={blog.update_at} />
-        </article>
-        <div className="hidden lg:block w-[260px] flex-shrink-0">
-          <TOC />
+          <div className="flex flex-col lg:flex-row gap-8">
+            <article className="w-full px-2 prose max-w-none lg:w-[860px] lg:min-w-0">
+              <MDX code={blog.body.code} date={blog.date} update_at={blog.update_at} />
+            </article>
+            <div className="hidden lg:block w-[260px] flex-shrink-0">
+              <TOC />
+            </div>
+          </div>
         </div>
       </div>
       <div className="lg:hidden">

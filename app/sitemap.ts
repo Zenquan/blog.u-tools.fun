@@ -3,7 +3,10 @@ import { compareDesc } from 'date-fns';
 import { allBlogs, allWeeklies } from 'contentlayer/generated';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const allPost = [...allBlogs, ...allWeeklies]
+  const allPost = [
+    ...allBlogs,
+    // ...allWeeklies, // 周刊暂时隐藏
+  ]
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
     .map((item) => ({
       url: `https://blog.u-tools.fun${item.url}`,

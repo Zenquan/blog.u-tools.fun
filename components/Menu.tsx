@@ -12,10 +12,10 @@ const LIST = [
     title: '博客',
     href: '/blog',
   },
-  {
-    title: '周刊',
-    href: '/weekly',
-  },
+  // {
+  //   title: '周刊',
+  //   href: '/weekly',
+  // },
   {
     title: '摄影',
     href: '/photos',

@@ -34,7 +34,7 @@ export default function SearchContent({ allBlogs, allWeeklies }: SearchContentPr
   // 合并博客和周刊数据
   const allPosts: Post[] = [
     ...allBlogs.map(post => ({ ...post, type: '博客' })),
-    ...allWeeklies.map(post => ({ ...post, type: '周刊' })),
+    // ...allWeeklies.map(post => ({ ...post, type: '周刊' })), // 周刊暂时隐藏
   ].sort((a, b) => (a.date > b.date ? -1 : 1));
 
   // 获取所有标签及其文章数量
